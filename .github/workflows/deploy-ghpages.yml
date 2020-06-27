@@ -1,0 +1,40 @@
+name: GitHub Pages Deploy
+
+on:
+  push:
+    branches:
+    - master
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checking out master
+      uses: actions/checkout@master
+
+    - name: Setting up Node v.10
+      uses: actions/setup-node@v1
+      with:
+        node-version: '10.16'
+
+    - name: Adding the ridiculously big and messy node_modules folder
+      run: npm install
+
+    - name: Setting up Git credentials
+      run: |
+        git config --global user.email "abasolojohnjourish@gmail.com"
+        git config --global user.name ${GHPAGES_DEPLOY_USERNAME}
+        git remote rm origin
+        git remote add origin https://${GHPAGES_DEPLOY_USERNAME}:${GHPAGES_DEPLOY_PAT}@github.com/${GHPAGES_DEPLOY_USERNAME}/covid-19-tracker.git
+      env:
+        GHPAGES_DEPLOY_PAT: ${{ secrets.GHPAGES_DEPLOY_PAT }}
+        GHPAGES_DEPLOY_USERNAME: jjdcabasolo
+      
+    - name: Deploying COVID-19 Tracker to GitHub Pages
+      run: |
+        sh setenv.sh ${API_HOST} ${API_KEY} ${API_URL}
+        npm run deploy
+      env:
+        API_HOST: ${{ secrets.API_HOST }}
+        API_KEY: ${{ secrets.API_KEY }}
+        API_URL: ${{ secrets.API_URL }}
