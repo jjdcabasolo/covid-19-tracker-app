@@ -25,7 +25,7 @@ jobs:
         git config --global user.email "abasolojohnjourish@gmail.com"
         git config --global user.name ${GHPAGES_DEPLOY_USERNAME}
         git remote rm origin
-        git remote add origin https://${GHPAGES_DEPLOY_USERNAME}:${GHPAGES_DEPLOY_PAT}@github.com/${GHPAGES_DEPLOY_USERNAME}/covid-19-tracker.git
+        git remote add origin https://${GHPAGES_DEPLOY_USERNAME}:${GHPAGES_DEPLOY_PAT}@github.com/${GHPAGES_DEPLOY_USERNAME}/covid-19-tracker-app.git
       env:
         GHPAGES_DEPLOY_PAT: ${{ secrets.GHPAGES_DEPLOY_PAT }}
         GHPAGES_DEPLOY_USERNAME: jjdcabasolo
