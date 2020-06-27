@@ -1,8 +1,8 @@
 {
-  "name": "covid-19-tracker",
+  "name": "covid-19-tracker-app",
   "version": "0.0.0",
   "description": "COVID-19 case count tracker written using LitElement",
-  "homepage": "https://jjdcabasolo.github.io/covid-19-tracker",
+  "homepage": "https://jjdcabasolo.github.io/covid-19-tracker-app",
   "author": "Jourish Abasolo",
   "license": "MIT",
   "dependencies": {

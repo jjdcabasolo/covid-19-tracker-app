@@ -3,7 +3,7 @@
 [![Built with open-wc recommendations](https://img.shields.io/badge/built%20with-open--wc-blue.svg)](https://github.com/open-wc)
 
 ## Demo
-Visit this [link](http://app-tracker-jourish.herokuapp.com/). App deployed at Heroku.
+Visit this [link](https://jjdcabasolo.github.io/covid-19-tracker-app). Deployed at GitHub Pages.
 
 ## Quickstart
 
