@@ -2,7 +2,6 @@ import { LitElement, html, css } from 'lit-element';
 
 import darkThemeStyles from '../styles/dark-theme-styles';
 
-
 export default class StickyContainer extends LitElement {
   static get styles() {
     return [
@@ -11,7 +10,7 @@ export default class StickyContainer extends LitElement {
           background-color: var(--light-theme-background-color);
           border-bottom: 1px var(--gray-300) solid;
           margin-left: -8px;
-          padding: 24px 8px;
+          padding: 24px 8px 16px 8px;
           position: -webkit-sticky;
           position: sticky;
           top: 0;

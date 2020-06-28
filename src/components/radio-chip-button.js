@@ -12,12 +12,12 @@ export default class RadioChipButton extends ChipButton {
     }
 
     this.dispatchEvent(
-      new CustomEvent('handle-sort-by', {
+      new CustomEvent('set-config', {
         detail: {
-          type: 'coverage',
-          sortBy: `${this.label}`,
+          key: 'coverage',
+          value: `${this.label}`,
         },
-      })
+      }),
     );
 
     return null;

@@ -13,13 +13,7 @@ export default [
 
   html`
     <div class="small-text primary-text">
-      Night mode 🌓 depends on your device's theme preference. Try toggling it!
-    </div>
-  `,
-
-  html`
-    <div class="small-text primary-text">
-      Night mode 🌓 depends on your device's theme preference. Try toggling it!
+      Night mode 🌓 depends on your device's theme preference. Try toggling it in settings!
     </div>
   `,
 

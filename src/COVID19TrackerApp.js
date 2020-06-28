@@ -43,9 +43,10 @@ export default class COVID19TrackerApp extends LitElement {
   static get properties() {
     return {
       error: { type: String },
+      isLoading: { type: Boolean },
       isMobile: { type: Boolean },
       query: { type: String },
-      sortBy: { type: Object },
+      config: { type: Object },
       worldwide: { type: Object },
     };
   }
@@ -54,26 +55,24 @@ export default class COVID19TrackerApp extends LitElement {
     super();
 
     this.error = '';
+    this.isLoading = true;
     this.isMobile = window.innerWidth < 600;
     this.query = '';
-    this.sortBy = {
+    this.config = {
       count: 'cases-desc',
       coverage: 'country',
+      countryCount: 0,
     };
     this.worldwide = {};
   }
 
   connectedCallback() {
     super.connectedCallback();
-    window.addEventListener('resize', () =>
-      COVID19TrackerApp.handleResize(this)
-    );
+    window.addEventListener('resize', () => COVID19TrackerApp.handleResize(this));
   }
 
   disconnectedCallback() {
-    window.removeEventListener('resize', () =>
-      COVID19TrackerApp.handleResize(this)
-    );
+    window.removeEventListener('resize', () => COVID19TrackerApp.handleResize(this));
     super.disconnectedCallback();
   }
 
@@ -99,10 +98,6 @@ export default class COVID19TrackerApp extends LitElement {
           <app-description></app-description>
         </div>
 
-        <div class="content world-banner">
-          ${this.renderWorldwideBanner()}
-        </div>
-
         ${this.renderUtilityBanner('top')}
 
         <div class="content">
@@ -110,9 +105,11 @@ export default class COVID19TrackerApp extends LitElement {
             ?isMobile="${this.isMobile}"
             @handle-error="${this.handleError}"
             @handle-fetching="${this.handleFetching}"
+            @set-config="${this.setConfig}"
             @handle-worldwide-update="${this.handleWorldwideUpdate}"
-            count="${this.sortBy.count}"
-            coverage="${this.sortBy.coverage}"
+            @update-is-fetching="${this.updateIsFetching}"
+            count="${this.config.count}"
+            coverage="${this.config.coverage}"
             query="${this.query}"
           ></country-list-connected>
         </div>
@@ -141,20 +138,17 @@ export default class COVID19TrackerApp extends LitElement {
   }
 
   renderUtilityBanner(location) {
-    if (Object.keys(this.worldwide).length > 0) {
-      return html`
-        <utility-banner
-          ?isMobile="${this.isMobile}"
-          @handle-search-query="${this.handleSearchQuery}"
-          @handle-sort-by="${this.handleSortBy}"
-          count="${this.sortBy.count}"
-          coverage="${this.sortBy.coverage}"
-          location="${location}"
-        ></utility-banner>
-      `;
-    }
-
-    return nothing;
+    return html`
+      <utility-banner
+        .countryCount="${this.config.countryCount}"
+        ?isLoading="${this.isLoading}"
+        ?isMobile="${this.isMobile}"
+        @handle-search-query="${this.handleSearchQuery}"
+        count="${this.config.count}"
+        coverage="${this.config.coverage}"
+        location="${location}"
+      ></utility-banner>
+    `;
   }
 
   static handleResize(context) {
@@ -162,29 +156,35 @@ export default class COVID19TrackerApp extends LitElement {
     context.isMobile = window.innerWidth < 600;
   }
 
-  async fetchCountries() {
-    this.countries = [];
-  }
-
   handleSearchQuery({ detail }) {
     const { query } = detail;
+
     this.query = query;
   }
 
-  handleSortBy({ detail }) {
-    const { type, sortBy } = detail;
-    const updatedSortBy = { ...this.sortBy };
-    updatedSortBy[type] = sortBy;
-    this.sortBy = updatedSortBy;
+  setConfig({ detail }) {
+    const { key, value } = detail;
+    const updatedSortBy = { ...this.config };
+
+    updatedSortBy[key] = value;
+    this.config = updatedSortBy;
   }
 
   handleWorldwideUpdate({ detail }) {
     const { worldwide } = detail;
+
     this.worldwide = worldwide;
   }
 
   handleError({ detail }) {
     const { error } = detail;
+
     this.error = error;
+  }
+
+  updateIsFetching({ detail }) {
+    const { isLoading } = detail;
+
+    this.isLoading = isLoading;
   }
 }

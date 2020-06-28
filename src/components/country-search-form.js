@@ -5,7 +5,6 @@ import '@material/mwc-icon';
 import darkThemeStyles from '../styles/dark-theme-styles';
 import fontStyles from '../styles/font-styles';
 
-
 export default class CountrySearchForm extends LitElement {
   static get styles() {
     return [
@@ -29,6 +28,9 @@ export default class CountrySearchForm extends LitElement {
           left: 16px;
           top: 8px;
         }
+        .disabled {
+          pointer-events: none;
+        }
         @media screen and (max-width: 600px) {
           .input-container {
             position: static;
@@ -47,9 +49,21 @@ export default class CountrySearchForm extends LitElement {
     ];
   }
 
+  static get properties() {
+    return {
+      readonly: { type: Boolean },
+    };
+  }
+
+  constructor() {
+    super();
+
+    this.readonly = false;
+  }
+
   render() {
     return html`
-      <div class="input-container">
+      <div class="input-container ${this.readonly ? 'disabled' : ''}">
         <mwc-icon
           class="search-icon primary-text"
           @click="${this.handleIconClick}"

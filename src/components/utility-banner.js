@@ -31,6 +31,9 @@ export default class UtilityBanner extends LitElement {
         mwc-icon {
           cursor: pointer;
         }
+        .count {
+          margin-top: 16px;
+        }
       `,
       darkThemeStyles,
     ];
@@ -39,8 +42,10 @@ export default class UtilityBanner extends LitElement {
   static get properties() {
     return {
       count: { type: String },
+      countryCount: { type: Number },
       coverage: { type: String },
       isExpanded: { type: Boolean },
+      isLoading: { type: Boolean },
       isMobile: { type: Boolean },
       location: { type: String },
     };
@@ -50,8 +55,10 @@ export default class UtilityBanner extends LitElement {
     super();
 
     this.count = '';
+    this.countryCount = 0;
     this.coverage = '';
     this.isExpanded = true;
+    this.isLoading = false;
     this.isMobile = false;
     this.location = '';
   }
@@ -67,7 +74,8 @@ export default class UtilityBanner extends LitElement {
 
       return html`
         <sticky-container>
-          ${searchForm} ${sortByForm}
+          ${searchForm}
+          ${this.renderCountDetails()}
         </sticky-container>
       `;
     }
@@ -85,6 +93,7 @@ export default class UtilityBanner extends LitElement {
               </mwc-icon>
             </div>
           </div>
+          ${this.renderCountDetails()}
 
           ${this.isExpanded ? nothing : sortByForm}
         </sticky-container>
@@ -97,6 +106,7 @@ export default class UtilityBanner extends LitElement {
   renderSearchForm() {
     return html`
       <country-search-form
+        ?readonly="${this.isLoading}"
         @handle-search-query="${this.handleSearchQuery}"
       ></country-search-form>
     `;
@@ -105,10 +115,23 @@ export default class UtilityBanner extends LitElement {
   renderSortForm() {
     return html`
       <sort-by-banner
-        @handle-sort-by="${this.handleSortBy}"
+        @set-config="${this.setConfig}"
         count="${this.count}"
         coverage="${this.coverage}"
       ></sort-by-banner>
+    `;
+  }
+
+  renderCountDetails() {
+    if (this.countryCount <= 0) {
+      return nothing;
+    }
+
+    return html`
+      <div class="primary-text small-text count">
+        ${this.countryCount}
+        <span class="secondary-text">countries listed</span>
+      </div>
     `;
   }
 
@@ -116,8 +139,8 @@ export default class UtilityBanner extends LitElement {
     this.dispatchEvent(new CustomEvent('handle-search-query', { detail }));
   }
 
-  handleSortBy({ detail }) {
-    this.dispatchEvent(new CustomEvent('handle-sort-by', { detail }));
+  setConfig({ detail }) {
+    this.dispatchEvent(new CustomEvent('set-config', { detail }));
   }
 
   handleIconClick() {

@@ -44,24 +44,24 @@ export default class SortByBanner extends LitElement {
         ${this.renderItem('sort by:', false)}
         ${this.renderItem('coverage', true)}
         ${['country', 'continent'].map(
-          e => html`
+    (e) => html`
             <radio-chip-button
-              @handle-sort-by="${this.handleSortBy}"
+              @set-config="${this.setConfig}"
               active="${this.coverage}"
               label="${e}"
             ></radio-chip-button>
-          `
-        )}
+          `,
+  )}
         ${this.renderItem('', false)} ${this.renderItem('count', true)}
         ${['cases', 'deaths', 'recoveries'].map(
-          e => html`
+    (e) => html`
             <sort-chip-button
-              @handle-sort-by="${this.handleSortBy}"
+              @set-config="${this.setConfig}"
               active="${this.count}"
               label="${e}"
             ></sort-chip-button>
-          `
-        )}
+          `,
+  )}
       </div>
     `;
   }
@@ -71,16 +71,16 @@ export default class SortByBanner extends LitElement {
     return html`
       <div
         class="item sort-item small-text vcenter ${isSecondary
-          ? 'secondary-text'
-          : 'primary-text'}"
+    ? 'secondary-text'
+    : 'primary-text'}"
       >
         ${content}
       </div>
     `;
   }
 
-  handleSortBy({ detail }) {
-    this.dispatchEvent(new CustomEvent('handle-sort-by', { detail }));
+  setConfig({ detail }) {
+    this.dispatchEvent(new CustomEvent('set-config', { detail }));
   }
 }
 

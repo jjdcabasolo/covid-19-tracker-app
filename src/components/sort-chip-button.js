@@ -38,12 +38,12 @@ export default class SortChipButton extends ChipButton {
 
     this.value = updatedAsc;
     this.dispatchEvent(
-      new CustomEvent('handle-sort-by', {
+      new CustomEvent('set-config', {
         detail: {
-          type: 'count',
-          sortBy: `${this.label}-${updatedAsc ? 'asc' : 'desc'}`,
+          key: 'count',
+          value: `${this.label}-${updatedAsc ? 'asc' : 'desc'}`,
         },
-      })
+      }),
     );
   }
 

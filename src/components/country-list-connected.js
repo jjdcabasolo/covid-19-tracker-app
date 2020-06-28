@@ -20,7 +20,6 @@ export default class CountryListConnected extends CountryList {
     const simpleCrypto = new SimpleCrypto(apiPassphrase || process.env.API_PASSPHRASE);
     const decryptedKey = simpleCrypto.decrypt(key);
 
-    this.updateIsFetching(true);
     try {
       const response = await fetch(url, {
         method: 'GET',
@@ -45,18 +44,14 @@ export default class CountryListConnected extends CountryList {
         }),
       );
     } finally {
-      this.updateIsFetching(false);
+      this.dispatchEvent(
+        new CustomEvent('update-is-fetching', {
+          detail: {
+            isLoading: false,
+          },
+        }),
+      );
     }
-  }
-
-  updateIsFetching(isFetching) {
-    this.dispatchEvent(
-      new CustomEvent('handle-fetching', {
-        detail: {
-          isFetching,
-        },
-      }),
-    );
   }
 
   extractData() {
@@ -97,6 +92,15 @@ export default class CountryListConnected extends CountryList {
       new CustomEvent('handle-worldwide-update', {
         detail: {
           worldwide: { ...extractedWorldwide },
+        },
+      }),
+    );
+
+    this.dispatchEvent(
+      new CustomEvent('set-config', {
+        detail: {
+          key: 'countryCount',
+          value: `${extractedCountries.length}`,
         },
       }),
     );

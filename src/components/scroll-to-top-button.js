@@ -6,7 +6,6 @@ import '@material/mwc-icon';
 import darkThemeStyles from '../styles/dark-theme-styles';
 import flexboxStyles from '../styles/flexbox-styles';
 
-
 export default class ScrollToTopButton extends LitElement {
   static get styles() {
     return [
