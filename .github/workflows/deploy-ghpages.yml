@@ -32,9 +32,10 @@ jobs:
       
     - name: Deploying COVID-19 Tracker to GitHub Pages
       run: |
-        sh setenv.sh ${API_HOST} ${API_KEY} ${API_URL}
+        sh setenv.sh ${API_HOST} ${API_KEY} ${API_URL} ${API_PASS}
         npm run deploy
       env:
         API_HOST: ${{ secrets.API_HOST }}
         API_KEY: ${{ secrets.API_KEY }}
         API_URL: ${{ secrets.API_URL }}
+        API_PASS: ${{ secrets.API_PASS }}

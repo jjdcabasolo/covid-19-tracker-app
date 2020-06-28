@@ -4,7 +4,12 @@ import formatCountryName from '../utils/formatCountryName';
 
 import continents from '../constants/continents';
 
-import { apiHost, apiKey, apiUrl } from '../constants/api';
+import {
+  apiHost,
+  apiKey,
+  apiUrl,
+  apiPassphrase,
+} from '../constants/api';
 
 export default class CountryListConnected extends CountryList {
   async fetchCountries() {
@@ -12,13 +17,16 @@ export default class CountryListConnected extends CountryList {
     const key = apiKey || process.env.API_KEY;
     const url = apiUrl || process.env.API_URL;
 
+    const simpleCrypto = new SimpleCrypto(apiPassphrase || process.env.API_PASSPHRASE);
+    const decryptedKey = simpleCrypto.decrypt(key);
+
     this.updateIsFetching(true);
     try {
       const response = await fetch(url, {
         method: 'GET',
         headers: {
           'x-rapidapi-host': host,
-          'x-rapidapi-key': key,
+          'x-rapidapi-key': decryptedKey,
         },
       });
       if (response.status !== 200) throw response;
