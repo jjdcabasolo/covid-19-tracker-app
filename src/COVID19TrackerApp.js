@@ -10,7 +10,7 @@ import darkThemeStyles from './styles/dark-theme-styles';
 import flexboxStyles from './styles/flexbox-styles';
 import fontStyles from './styles/font-styles';
 
-export default class AppTrackerJourish extends LitElement {
+export default class COVID19TrackerApp extends LitElement {
   static get styles() {
     return [
       flexboxStyles,
@@ -65,11 +65,15 @@ export default class AppTrackerJourish extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    window.addEventListener('resize', () => AppTrackerJourish.handleResize(this));
+    window.addEventListener('resize', () =>
+      COVID19TrackerApp.handleResize(this)
+    );
   }
 
   disconnectedCallback() {
-    window.removeEventListener('resize', () => AppTrackerJourish.handleResize(this));
+    window.removeEventListener('resize', () =>
+      COVID19TrackerApp.handleResize(this)
+    );
     super.disconnectedCallback();
   }
 

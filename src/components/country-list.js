@@ -154,27 +154,26 @@ export default class CountryList extends LitElement {
             `;
           }
 
-          return html` <country-card-skeleton></country-card-skeleton> `;
-          // if (i > this.loadedItems - 1) {
-          //   return html` <country-card-skeleton></country-card-skeleton> `;
-          // }
+          if (i > this.loadedItems - 1) {
+            return html` <country-card-skeleton></country-card-skeleton> `;
+          }
 
-          // return html`
-          //   <div class="country-card-item">
-          //     <country-card
-          //       activeFilter="${this.count}"
-          //       cases="${e.cases.total}"
-          //       country="${e.country.replace(/-/g, ' ')}"
-          //       coverage="${this.coverage}"
-          //       deaths="${e.deaths.total}"
-          //       newCases="${e.cases.new}"
-          //       newDeaths="${e.deaths.new}"
-          //       rank="${e.position}"
-          //       recovered="${e.cases.recovered}"
-          //       time="${e.time}"
-          //     ></country-card>
-          //   </div>
-          // `;
+          return html`
+            <div class="country-card-item">
+              <country-card
+                activeFilter="${this.count}"
+                cases="${e.cases.total}"
+                country="${e.country.replace(/-/g, ' ')}"
+                coverage="${this.coverage}"
+                deaths="${e.deaths.total}"
+                newCases="${e.cases.new}"
+                newDeaths="${e.deaths.new}"
+                rank="${e.position}"
+                recovered="${e.cases.recovered}"
+                time="${e.time}"
+              ></country-card>
+            </div>
+          `;
         });
     }
 

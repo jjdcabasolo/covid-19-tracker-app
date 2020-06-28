@@ -2,7 +2,7 @@
   "version": 2,
   "tags": [
     {
-      "name": "app-tracker-jourish",
+      "name": "covid-19-tracker-app",
       "description": "An application with a title and an action counter",
       "properties": [
         {
