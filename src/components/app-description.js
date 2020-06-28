@@ -21,7 +21,7 @@ export default class AppDescription extends LitElement {
 
   // eslint-disable-next-line class-methods-use-this
   render() {
-    return descriptions[0];
+    return descriptions[Math.floor(Math.random() * descriptions.length)];
   }
 }
 
