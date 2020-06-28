@@ -10,7 +10,12 @@ module.exports = {
     {
       transform(context) {
         const { env } = process;
-        const { API_URL, API_HOST, API_KEY } = env;
+        const {
+          API_URL,
+          API_HOST,
+          API_KEY,
+          API_PASSPHRASE,
+        } = env;
 
         if (context.path === '/') {
           const transformedBody = context.body.replace(
@@ -21,9 +26,10 @@ module.exports = {
                   API_URL: "${API_URL}",
                   API_HOST: "${API_HOST}",
                   API_KEY: "${API_KEY}",
+                  API_PASSPHRASE: "${API_PASSPHRASE}",
                 }
               }
-            </script></head>`
+            </script></head>`,
           );
           return { body: transformedBody };
         }

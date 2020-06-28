@@ -6,7 +6,6 @@ import './country-date-item';
 import darkThemeStyles from '../styles/dark-theme-styles';
 import flexboxStyles from '../styles/flexbox-styles';
 
-
 export default class WorldwideBanner extends LitElement {
   static get styles() {
     return [
