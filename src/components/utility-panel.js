@@ -92,7 +92,6 @@ export default class UtilityPanel extends LitElement {
 
   static get properties() {
     return {
-      countryCount: { type: Number },
       filter: { type: String },
       isExpanded: { type: Boolean },
       isLoading: { type: Boolean },
@@ -105,7 +104,6 @@ export default class UtilityPanel extends LitElement {
   constructor() {
     super();
 
-    this.countryCount = 0;
     this.filter = '';
     this.isExpanded = true;
     this.isLoading = false;
