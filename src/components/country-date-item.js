@@ -5,7 +5,6 @@ import darkThemeStyles from '../styles/dark-theme-styles';
 import flexboxStyles from '../styles/flexbox-styles';
 import fontStyles from '../styles/font-styles';
 
-
 import formatCountryName from '../utils/formatCountryName';
 import ordinalize from '../utils/ordinalize';
 
@@ -23,7 +22,6 @@ export default class CountryDateItem extends LitElement {
           margin-right: 8px;
         }
         img {
-          margin-top: 4px;
           height: 24px;
         }
         .date {
@@ -65,7 +63,7 @@ export default class CountryDateItem extends LitElement {
 
     return html`
       <div class="container">
-        <div class="item country large-text primary-text ">
+        <div class="item country medium-text primary-text ">
           ${this.processCountryNames()}
         </div>
         <div class="item">
@@ -74,22 +72,22 @@ export default class CountryDateItem extends LitElement {
       </div>
       <div
         class="date small-text secondary-text item ${this.isCentered
-    ? 'hcenter'
-    : ''}"
+          ? 'hcenter'
+          : ''}"
       >
         ${this.rank > -1
-    ? html`
+          ? html`
               <span class="primary-text"
                 >${ordinalize(this.rank + 1)}&nbsp;</span
               >
             `
-    : nothing}
+          : nothing}
         as of ${month} ${day}, ${year}
       </div>
       <div
         class="date small-text secondary-text item ${this.isCentered
-    ? 'hcenter'
-    : ''}"
+          ? 'hcenter'
+          : ''}"
       >
         ${time}
       </div>
@@ -103,14 +101,18 @@ export default class CountryDateItem extends LitElement {
         formattedCountryName = 'united kingdom';
       }
 
-      const res = countries.find((e) => formatCountryName(e.name).includes(formattedCountryName));
+      const res = countries.find(e =>
+        formatCountryName(e.name).includes(formattedCountryName)
+      );
       const { code } = res;
 
-      return html`<img
-        alt="The National Flag of ${this.country}."
-        class="country-flag"
-        src="https://www.countryflags.io/${code}/shiny/24.png"
-      />`;
+      return html`
+        <img
+          alt="The National Flag of ${this.country}."
+          class="country-flag"
+          src="https://www.countryflags.io/${code}/shiny/24.png"
+        />
+      `;
     }
 
     return nothing;
@@ -124,6 +126,7 @@ export default class CountryDateItem extends LitElement {
   */
   processCountryNames() {
     const dummyTextarea = document.createElement('textarea');
+
     dummyTextarea.innerHTML = this.country;
     return dummyTextarea.value;
   }
