@@ -9,79 +9,113 @@ import flexboxStyles from '../styles/flexbox-styles';
 export default class WorldwideBanner extends LitElement {
   static get styles() {
     return [
+      flexboxStyles,
       css`
+        .card {
+          border-radius: 4px;
+          border: 1px solid var(--gray-300);
+          box-sizing: border-box;
+          display: inline-block;
+          margin-bottom: 16px;
+          padding: 16px;
+          position: relative;
+          width: 100%;
+        }
+        .card:hover {
+          box-shadow: var(--card-shadow);
+        }
         @media screen and (max-width: 600px) {
-          .item {
-            flex-basis: 100%;
-            justify-content: center;
+          .card {
+            padding: 16px 24px;
+          }
+          .countries:nth-child(2) {
+            margin-top: 16px;
+          }
+          .countries {
             margin: 8px 0;
           }
-          .container {
-            margin: 8px 0 8px 0;
+          .countries:last-child {
+            margin-bottom: 0;
           }
         }
       `,
-      flexboxStyles,
       darkThemeStyles,
     ];
   }
 
   static get properties() {
     return {
-      cases: { type: Number },
-      deaths: { type: Number },
+      activeFilter: { type: String },
+      coverage: { type: Object },
       isMobile: { type: Boolean },
-      newCases: { type: Number },
-      newDeaths: { type: Number },
-      recovered: { type: Number },
-      time: { type: String },
     };
   }
 
   constructor() {
     super();
 
-    this.cases = 0;
-    this.deaths = 0;
+    this.activeFilter = '';
+    this.coverage = {};
     this.isMobile = false;
-    this.newCases = 0;
-    this.newDeaths = 0;
-    this.recovered = 0;
-    this.time = '';
   }
 
   render() {
+    const { cases: c, deaths: d } = this.coverage;
+    const { total: cases, new: newCases, recovered } = c;
+    const { total: deaths, new: newDeaths } = d;
+
     return html`
-      <div class="container equal-space">
-        ${this.renderCountryDate()}
-        ${this.renderCaseCount(true, 'cases', this.cases, this.newCases)}
-        ${this.renderCaseCount(true, 'deaths', this.deaths, this.newDeaths)}
-        ${this.renderCaseCount(true, 'recoveries', this.recovered, NaN)}
+      <div class="card">
+        <div class="container ${this.isMobile ? 'vertical' : 'equal-space'}">
+          ${this.renderCountryDate()}
+          ${this.renderCaseCount(
+            'confirmed cases',
+            cases.toLocaleString(),
+            Number(newCases).toLocaleString(),
+            this.activeFilter.includes('cases')
+          )}
+          ${this.renderCaseCount(
+            'deaths',
+            deaths.toLocaleString(),
+            Number(newDeaths).toLocaleString(),
+            this.activeFilter.includes('deaths')
+          )}
+          ${this.renderCaseCount(
+            'recoveries',
+            recovered.toLocaleString(),
+            NaN,
+            this.activeFilter.includes('recoveries')
+          )}
+        </div>
       </div>
     `;
   }
 
   renderCountryDate() {
+    const { time, country } = this.coverage;
+
     return html`
       <div class="item">
         <country-date-item
-          ?isCentered="${this.isMobile}"
-          country="Worldwide cases"
-          date="${this.time}"
+          country=${country}
+          date="${time}"
         ></country-date-item>
       </div>
     `;
   }
 
-  renderCaseCount(isHighlighted, category, count, newCount) {
+  // eslint-disable-next-line class-methods-use-this
+  renderCaseCount(category, count, newCount, isHighlighted) {
     return html`
-      <div class="item">
+      <div class="item ${this.isMobile ? 'countries' : 'vcenter'}">
         <case-count
-          ?isCentered="${this.isMobile}"
-          ?isHighlighted="${isHighlighted}"
-          category="${category}"
-          count="${count}"
-          newCount="${newCount}"
+          ?isCentered=${!this.isMobile}
+          ?isInline=${this.isMobile}
+          ?isHighlighted=${isHighlighted}
+          category=${category}
+          label=${category}
+          subvalue=${newCount}
+          value=${count}
         ></case-count>
       </div>
     `;
