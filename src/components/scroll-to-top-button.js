@@ -12,25 +12,23 @@ export default class ScrollToTopButton extends LitElement {
       flexboxStyles,
       css`
         .button-container {
-          position: sticky;
-          justify-content: flex-end;
-          display: flex;
-          padding: 0 40px 96px 0;
           bottom: 0;
+          display: flex;
+          justify-content: flex-end;
+          padding: 0 40px 96px 0;
+          position: sticky;
         }
-
         .button {
-          height: 48px;
-          width: 48px;
-          border-radius: 40px;
           background-color: var(--light-theme-background-color);
+          border-radius: 40px;
           box-shadow: var(--card-shadow);
           cursor: pointer;
+          height: 48px;
+          width: 48px;
         }
-
         @media screen and (max-width: 600px) {
           .button-container {
-            padding: 0 16px 120px 0;
+            padding: 0 16px 150px 0;
           }
         }
       `,
@@ -58,10 +56,7 @@ export default class ScrollToTopButton extends LitElement {
     return html`
       <div class="button-container">
         <div class="button item hcenter vcenter">
-          <mwc-icon
-            class="search-icon primary-text"
-            @click="${this.handleIconClick}"
-          >
+          <mwc-icon class="primary-text" @click="${this.handleIconClick}">
             arrow_upward
           </mwc-icon>
         </div>
