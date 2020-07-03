@@ -6,7 +6,6 @@ import flexboxStyles from '../styles/flexbox-styles';
 import fontStyles from '../styles/font-styles';
 import legendStyles from '../styles/legend-styles';
 
-
 export default class CaseCount extends LitElement {
   static get styles() {
     return [
@@ -47,11 +46,12 @@ export default class CaseCount extends LitElement {
   static get properties() {
     return {
       category: { type: String },
-      count: { type: Number },
       isCentered: { type: Boolean },
       isHighlighted: { type: Boolean },
       isInline: { type: Boolean },
-      newCount: { type: Number },
+      label: { type: String },
+      subvalue: { type: String },
+      value: { type: String },
     };
   }
 
@@ -59,11 +59,12 @@ export default class CaseCount extends LitElement {
     super();
 
     this.category = '';
-    this.count = 0;
+    this.value = '';
     this.isCentered = false;
     this.isHighlighted = false;
+    this.label = '';
     this.isInline = false;
-    this.newCount = 0;
+    this.subvalue = '';
   }
 
   render() {
@@ -77,37 +78,37 @@ export default class CaseCount extends LitElement {
             ${this.isCentered ? 'hcenter' : ''}
             ${this.isHighlighted ? 'highlight' : ''}"
           >
-            ${this.count.toLocaleString()}
+            ${this.value}
           </div>
-          ${this.renderNewCount()}
+          ${this.renderSubvalue()}
         </div>
         <div
           class="subtitle small-text secondary-text item ${this.isCentered
-    ? 'hcenter'
-    : ''}"
+            ? 'hcenter'
+            : ''}"
         >
-          ${this.category}
+          ${this.label}
         </div>
         ${this.renderLegend()}
       </div>
     `;
   }
 
-  renderNewCount() {
-    const newCountItem = html`
+  renderSubvalue() {
+    const subvalueItem = html`
       <div class="new-count small-text secondary-text item vcenter">
-        (${this.newCount.toLocaleString()} new)
+        (${this.subvalue} new)
       </div>
     `;
 
-    if (!Number.isNaN(this.newCount)) {
+    if (this.subvalue !== 'NaN') {
       if (this.isInline) {
-        return newCountItem;
+        return subvalueItem;
       }
 
       return html`
         <div class="item ${this.isCentered ? 'hcenter remove-margin' : ''}">
-          ${newCountItem}
+          ${subvalueItem}
         </div>
       `;
     }
@@ -118,14 +119,12 @@ export default class CaseCount extends LitElement {
   renderLegend() {
     return html`
       <div
-        class="item vcenter legend-container ${this.isCentered
-    ? 'hcenter'
-    : ''}"
+        class="item vcenter legend-container
+        ${this.isCentered ? 'hcenter' : ''}"
       >
         <span
-          class="legend ${this.category}-bg ${this.isHighlighted
-  ? ''
-  : 'inactive-legend'}"
+          class="legend ${this.category}-bg
+          ${this.isHighlighted ? '' : 'inactive-legend'}"
         ></span>
       </div>
     `;
