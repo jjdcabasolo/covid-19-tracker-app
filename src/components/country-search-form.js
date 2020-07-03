@@ -5,6 +5,8 @@ import '@material/mwc-icon';
 import darkThemeStyles from '../styles/dark-theme-styles';
 import fontStyles from '../styles/font-styles';
 
+import debounceEvent from '../utils/debounce';
+
 export default class CountrySearchForm extends LitElement {
   static get styles() {
     return [
@@ -14,19 +16,19 @@ export default class CountrySearchForm extends LitElement {
           position: relative;
         }
         input[name='countrySearch'] {
-          border-color: var(--light-theme-divider-color);
-          border-radius: 2px;
-          border-style: solid;
-          border-width: 1px;
+          background-color: transparent;
+          border-radius: 4px;
+          border: 1px solid var(--gray-300);
           box-sizing: border-box;
           font-family: 'Roboto Mono', monospace;
-          padding: 8px 16px 8px 52px;
+          font-size: 14px;
+          padding: 8px 16px 8px 36px;
           width: 100%;
         }
         .search-icon {
+          left: 8px;
           position: absolute;
-          left: 16px;
-          top: 8px;
+          top: 7px;
         }
         .disabled {
           pointer-events: none;
@@ -70,13 +72,9 @@ export default class CountrySearchForm extends LitElement {
           >search</mwc-icon
         >
         <input
-          class="medium-text primary-text"
-          placeholder="Search country..."
+          class="primary-text"
           type="search"
-          @input="${this.debounceEvent(
-    () => this.handleSearchQuery(this),
-    500,
-  )}"
+          @input="${debounceEvent(() => this.handleSearchQuery(this), 500)}"
           name="countrySearch"
           id="countrySearch"
         />
@@ -85,31 +83,19 @@ export default class CountrySearchForm extends LitElement {
     `;
   }
 
-  // code taken from: https://gist.github.com/nmsdvid/8807205
-  // eslint-disable-next-line class-methods-use-this
-  debounceEvent(callback, time) {
-    let interval;
-    return (...args) => {
-      clearTimeout(interval);
-      interval = setTimeout(() => {
-        interval = null;
-        callback(...args);
-      }, time);
-    };
-  }
-
   handleSearchQuery(e) {
     const query = e.shadowRoot.getElementById('countrySearch').value;
 
     this.dispatchEvent(
       new CustomEvent('handle-search-query', {
         detail: { query },
-      }),
+      })
     );
   }
 
   handleIconClick() {
     const input = this.shadowRoot.getElementById('countrySearch');
+
     input.focus();
   }
 }
