@@ -6,6 +6,8 @@ import './country-card';
 import './skeleton-loaders/country-card-skeleton';
 import './scroll-to-top-button';
 
+import formatCountryName from '../utils/formatCountryName';
+
 import fontStyles from '../styles/font-styles';
 
 export default class CountryList extends LitElement {
@@ -19,7 +21,6 @@ export default class CountryList extends LitElement {
         .loader {
           width: 100%;
         }
-
         #scrollToTopSentinel {
           position: absolute;
           bottom: 0;
@@ -31,28 +32,28 @@ export default class CountryList extends LitElement {
 
   static get properties() {
     return {
-      continents: { type: Array },
-      count: { type: String },
       countries: { type: Array },
-      coverage: { type: String },
+      filter: { type: String },
       hasScrollToTop: { type: Boolean },
       isMobile: { type: Boolean },
       loadedItems: { type: Number },
+      preference: { type: Array },
       query: { type: String },
+      sort: { type: String },
     };
   }
 
   constructor() {
     super();
 
-    this.continents = [];
-    this.count = '';
     this.countries = [];
-    this.coverage = '';
+    this.filter = '';
     this.hasScrollToTop = false;
     this.isMobile = false;
     this.loadedItems = 10;
+    this.preference = [];
     this.query = '';
+    this.sort = '';
   }
 
   connectedCallback() {
@@ -65,8 +66,8 @@ export default class CountryList extends LitElement {
     const loadMoreSentinel = this.shadowRoot.getElementById('loadMoreSentinel');
 
     if (loadMoreSentinel) {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
           if (entry.intersectionRatio > 0) {
             setTimeout(() => {
               this.loadedItems += 20;
@@ -79,12 +80,12 @@ export default class CountryList extends LitElement {
     }
 
     const scrollToTopSentinel = this.shadowRoot.getElementById(
-      'scrollToTopSentinel',
+      'scrollToTopSentinel'
     );
 
     if (scrollToTopSentinel) {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
           if (entry.intersectionRatio > 0) {
             this.hasScrollToTop = false;
           } else {
@@ -99,7 +100,7 @@ export default class CountryList extends LitElement {
 
   render() {
     return html`
-      <masonry-layout gap="16" maxcolwidth="${this.isMobile ? 390 : 310}">
+      <masonry-layout gap="14" maxcolwidth="${this.isMobile ? 390 : 310}">
         ${this.renderCountryList()}
       </masonry-layout>
       <div id="scrollToTopSentinel"></div>
@@ -112,49 +113,49 @@ export default class CountryList extends LitElement {
   renderCountryList() {
     const filteredItems = this.filterSearchQuery();
 
-    if (this.query.trim().length > 0) {
-      return html`<p class="primary-text">No results 😞</p>`;
-    }
+    if (filteredItems.length > 0) {
+      const extraItems = this.isMobile ? 0 : 3;
+      const itemAdjustment =
+        filteredItems.length > this.loadedItems ? extraItems : 0;
 
-    if (filteredItems.length <= 0) {
-      return Array(this.loadedItems).fill('').map(() => html` <country-card-skeleton></country-card-skeleton> `);
-    }
-
-    const extraItems = this.isMobile ? 0 : 3;
-    const itemAdjustment = filteredItems.length > this.loadedItems ? extraItems : 0;
-
-    return filteredItems
-      .slice(0, this.loadedItems + itemAdjustment)
-      .map((e, i) => {
-        if (i === this.loadedItems - 1) {
-          return html`
+      return filteredItems
+        .slice(0, this.loadedItems + itemAdjustment)
+        .map((e, i) => {
+          if (i === this.loadedItems - 1) {
+            return html`
               <div class="loader" id="loadMoreSentinel">
                 <country-card-skeleton></country-card-skeleton>
               </div>
             `;
-        }
+          }
 
-        if (i > this.loadedItems - 1) {
-          return html` <country-card-skeleton></country-card-skeleton> `;
-        }
+          if (i > this.loadedItems - 1) {
+            return html` <country-card-skeleton></country-card-skeleton> `;
+          }
 
-        return html`
-          <div class="country-card-item">
-            <country-card
-              activeFilter="${this.count}"
-              cases="${e.cases.total}"
-              country="${e.country.replace(/-/g, ' ')}"
-              coverage="${this.coverage}"
-              deaths="${e.deaths.total}"
-              newCases="${e.cases.new}"
-              newDeaths="${e.deaths.new}"
-              rank="${e.position}"
-              recovered="${e.cases.recovered}"
-              time="${e.time}"
-            ></country-card>
-          </div>
-        `;
-      });
+          return html`
+            <div class="country-card-item">
+              <country-card
+                .country=${e}
+                filter=${this.filter}
+                sort=${this.sort}
+              ></country-card>
+            </div>
+          `;
+        });
+    }
+
+    if (this.countries.length < 1) {
+      return Array(this.loadedItems)
+        .fill('')
+        .map(() => html` <country-card-skeleton></country-card-skeleton> `);
+    }
+
+    if (this.query.trim().length > 0) {
+      return html`<p class="primary-text">No results 😞</p>`;
+    }
+
+    return nothing;
   }
 
   async fetchCountries() {
@@ -162,42 +163,54 @@ export default class CountryList extends LitElement {
   }
 
   filterSearchQuery() {
-    const items = this.coverage.includes('country')
-      ? this.countries
-      : this.continents;
-    const filteredItems = items
+    const filteredItems = this.countries
+      .filter(e => {
+        if (this.filter === 'worldwide') return e;
+
+        if (!e.continent) return null;
+
+        const trimmedContinent = formatCountryName(e.continent);
+
+        return trimmedContinent === this.filter;
+      })
       .sort((a, b) => {
-        const isAsc = this.count.includes('asc');
-        let selectors = { first: 'cases', second: 'recovered' };
+        const [key, mode] = this.sort.split('-');
+        const isAsc = mode === 'asc';
 
-        if (this.count.includes('cases')) {
-          selectors = { first: 'cases', second: 'total' };
-        }
-        if (this.count.includes('deaths')) {
-          selectors = { first: 'deaths', second: 'total' };
+        let current = '';
+        let next = '';
+
+        switch (key) {
+          case 'cases':
+            current = a.cases.total;
+            next = b.cases.total;
+            break;
+          case 'deaths':
+            current = a.deaths.total;
+            next = b.deaths.total;
+            break;
+          case 'recoveries':
+            current = a.cases.recovered;
+            next = b.cases.recovered;
+            break;
+          case 'tests':
+            current = a.population > 0 ? a.tests.total / a.population : 0;
+            next = b.population > 0 ? b.tests.total / b.population : 0;
+            break;
+          default:
+            break;
         }
 
-        if (isAsc) {
-          return (
-            a[selectors.first][selectors.second]
-            - b[selectors.first][selectors.second]
-          );
-        }
-        return (
-          b[selectors.first][selectors.second]
-          - a[selectors.first][selectors.second]
-        );
+        if (isAsc) return current - next;
+        return next - current;
       })
       .map((e, i) => ({
         ...e,
         position: i,
       }))
-      .filter((e) => {
-        const trimmedCountry = e.country
-          .replace(/-/g, ' ')
-          .trim()
-          .toLowerCase();
-        const trimmedQuery = this.query.trim().toLowerCase();
+      .filter(e => {
+        const trimmedCountry = formatCountryName(e.country);
+        const trimmedQuery = formatCountryName(this.query);
 
         return trimmedCountry.includes(trimmedQuery);
       });
