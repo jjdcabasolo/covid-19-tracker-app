@@ -1,11 +1,6 @@
 import ChipButton from './chip-button';
 
 export default class RadioChipButton extends ChipButton {
-  // eslint-disable-next-line class-methods-use-this
-  renderIcon() {
-    return null;
-  }
-
   handleClick() {
     if (this.active === this.label) {
       return null;
@@ -14,10 +9,10 @@ export default class RadioChipButton extends ChipButton {
     this.dispatchEvent(
       new CustomEvent('set-config', {
         detail: {
-          key: 'coverage',
+          key: 'filter',
           value: `${this.label}`,
         },
-      }),
+      })
     );
 
     return null;

@@ -23,8 +23,8 @@ export default class SortChipButton extends ChipButton {
 
     return html`
       <div class="item icon vcenter">
-        <mwc-icon class="icon" @click="${this.handleIconClick}">
-          ${this.active.includes('asc') ? 'arrow_upward' : 'arrow_downward'}
+        <mwc-icon class="icon">
+          ${this.active.includes('asc') ? 'arrow_downward' : 'arrow_upward'}
         </mwc-icon>
       </div>
     `;
@@ -32,6 +32,7 @@ export default class SortChipButton extends ChipButton {
 
   handleClick() {
     let updatedAsc = !this.value;
+
     if (this.active.includes(this.label)) {
       updatedAsc = !this.active.includes('asc');
     }
@@ -40,10 +41,10 @@ export default class SortChipButton extends ChipButton {
     this.dispatchEvent(
       new CustomEvent('set-config', {
         detail: {
-          key: 'count',
+          key: 'sort',
           value: `${this.label}-${updatedAsc ? 'asc' : 'desc'}`,
         },
-      }),
+      })
     );
   }
 
