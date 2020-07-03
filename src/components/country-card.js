@@ -1,16 +1,20 @@
+/* eslint-disable class-methods-use-this */
 import { LitElement, html, css } from 'lit-element';
 
 import './case-count';
 import './country-date-item';
-import './stacked-bar-graph';
 
 import darkThemeStyles from '../styles/dark-theme-styles';
 import flexboxStyles from '../styles/flexbox-styles';
+import fontStyles from '../styles/font-styles';
+
+import formatCountryName from '../utils/formatCountryName';
 
 export default class CountryCard extends LitElement {
   static get styles() {
     return [
       flexboxStyles,
+      fontStyles,
       css`
         :host {
           width: inherit;
@@ -32,11 +36,22 @@ export default class CountryCard extends LitElement {
             width: inherit;
           }
         }
+        @media screen and (max-width: 600px) {
+          .card {
+            padding: 16px 24px;
+          }
+        }
         .statistic-container {
-          margin: 16px 0 8px 0;
+          margin-top: 16px;
         }
         .statistic {
           margin: 16px 0;
+        }
+        .statistic:first-child {
+          margin-top: 0;
+        }
+        .statistic:last-child {
+          margin-bottom: 0;
         }
       `,
       darkThemeStyles,
@@ -45,73 +60,73 @@ export default class CountryCard extends LitElement {
 
   static get properties() {
     return {
-      activeFilter: { type: String },
-      cases: { type: Number },
-      country: { type: String },
-      coverage: { type: String },
-      deaths: { type: Number },
-      newCases: { type: Number },
-      newDeaths: { type: Number },
-      rank: { type: Number },
-      recovered: { type: Number },
-      time: { type: String },
+      country: { type: Object },
+      filter: { type: String },
+      sort: { type: String },
     };
   }
 
   constructor() {
     super();
 
-    this.activeFilter = '';
-    this.cases = 0;
-    this.country = '';
-    this.coverage = '';
-    this.deaths = 0;
-    this.newCases = 0;
-    this.newDeaths = 0;
-    this.rank = -1;
-    this.recovered = 0;
-    this.time = '';
+    this.country = {};
+    this.filter = '';
+    this.sort = '';
   }
 
   render() {
+    const {
+      cases: c,
+      country,
+      deaths: d,
+      population,
+      position: rank,
+      tests: t,
+      time,
+    } = this.country;
+    const { total: cases, new: newCases, recovered } = c;
+    const { total: deaths, new: newDeaths } = d;
+    const { total: tests } = t;
+
+    const testPercentage =
+      tests / population > -1 ? ((tests / population) * 100).toFixed(2) : 0;
+
     return html`
       <div class="card">
         <country-date-item
-          ?withFlag="${this.coverage === 'country'}"
-          country="${this.country}"
-          date="${this.time}"
-          rank="${this.rank}"
+          ?withFlag=${true}
+          country=${formatCountryName(country, false)}
+          date=${time}
+          rank=${rank}
         ></country-date-item>
 
         <div class="statistic-container">
-          <stacked-bar-graph
-            activeFilter="${this.activeFilter}"
-            cases="${this.cases}"
-            deaths="${this.deaths}"
-            recoveries="${this.recovered}"
-          ></stacked-bar-graph>
-        </div>
-
-        <div class="statistic-container">
           ${this.renderStatistic(
+            'confirmed cases',
             'cases',
-            this.activeFilter.includes('cases'),
-            true,
-            this.cases,
-            this.newCases
+            this.sort.includes('cases'),
+            cases.toLocaleString(),
+            Number(newCases).toLocaleString()
           )}
           ${this.renderStatistic(
             'deaths',
-            this.activeFilter.includes('deaths'),
-            true,
-            this.deaths,
-            this.newDeaths
+            'deaths',
+            this.sort.includes('deaths'),
+            deaths.toLocaleString(),
+            Number(newDeaths).toLocaleString()
           )}
           ${this.renderStatistic(
             'recoveries',
-            this.activeFilter.includes('recoveries'),
-            true,
-            this.recovered,
+            'recoveries',
+            this.sort.includes('recoveries'),
+            recovered.toLocaleString(),
+            NaN
+          )}
+          ${this.renderStatistic(
+            'of the population tested',
+            'tests',
+            this.sort.includes('tests'),
+            `${testPercentage || 0}%`,
             NaN
           )}
         </div>
@@ -119,17 +134,29 @@ export default class CountryCard extends LitElement {
     `;
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  renderStatistic(label, isHighlighted, isInline, count, newCount) {
+  renderStatistic(...details) {
+    const [label, category, isHighlighted, count, newCount] = details;
+
     return html`
       <div class="statistic">
         <case-count
-          ?isHighlighted="${isHighlighted}"
-          ?isInline="${isInline}"
-          category="${label}"
-          count="${count}"
-          newCount="${newCount}"
+          ?isHighlighted=${isHighlighted}
+          ?isInline=${true}
+          category=${category}
+          label=${label}
+          subvalue=${newCount}
+          value=${count}
         ></case-count>
+      </div>
+    `;
+  }
+
+  renderSubheader(content) {
+    return html`
+      <div class="subheader-container">
+        <div class="secondary-text subheader">
+          ${content}
+        </div>
       </div>
     `;
   }
