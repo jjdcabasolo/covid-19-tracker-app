@@ -9,10 +9,13 @@ export default css`
     background-color: var(--amber-600);
   }
   .deaths-bg {
-    background-color: var(--blue-grey-600);
+    background-color: var(--deep-orange-600);
   }
   .recoveries-bg {
     background-color: var(--light-green-600);
+  }
+  .tests-bg {
+    background-color: var(--cyan-600);
   }
 
   .cases-c {
@@ -20,12 +23,16 @@ export default css`
     color: var(--amber-600);
   }
   .deaths-c {
-    border-color: var(--blue-grey-600);
-    color: var(--blue-grey-600);
+    border-color: var(--deep-orange-600);
+    color: var(--deep-orange-600);
   }
   .recoveries-c {
     border-color: var(--light-green-600);
     color: var(--light-green-600);
+  }
+  .tests-c {
+    border-color: var(--cyan-600);
+    color: var(--cyan-600);
   }
 
   @media (prefers-color-scheme: dark) {
@@ -33,10 +40,13 @@ export default css`
       background-color: var(--amber-200);
     }
     .deaths-bg {
-      background-color: var(--blue-grey-200);
+      background-color: var(--deep-orange-200);
     }
     .recoveries-bg {
       background-color: var(--light-green-200);
+    }
+    .tests-bg {
+      background-color: var(--cyan-200);
     }
 
     .cases-c {
@@ -44,12 +54,16 @@ export default css`
       color: var(--amber-200);
     }
     .deaths-c {
-      border-color: var(--blue-grey-200);
-      color: var(--blue-grey-200);
+      border-color: var(--deep-orange-200);
+      color: var(--deep-orange-200);
     }
     .recoveries-c {
       border-color: var(--light-green-200);
       color: var(--light-green-200);
+    }
+    .tests-c {
+      border-color: var(--cyan-200);
+      color: var(--cyan-200);
     }
   }
 `;
