@@ -50,6 +50,13 @@ export default class CaseCountSkeleton extends LitElement {
         .count-3-label {
           width: 45%;
         }
+
+        .count-4 {
+          width: 95%;
+        }
+        .count-4-label {
+          width: 15%;
+        }
       `,
       darkThemeStyles,
     ];
@@ -67,36 +74,14 @@ export default class CaseCountSkeleton extends LitElement {
     this.variant = 0;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   render() {
-    switch (this.variant) {
-      case 0:
-        return html`
-          <div class="count-container">
-            <div class="loader count count-1"></div>
-            <div class="loader count-label count-1-label"></div>
-            <div class="loader count-legend"></div>
-          </div>
-        `;
-
-      case 1:
-        return html`
-          <div class="count-container">
-            <div class="loader count count-2"></div>
-            <div class="loader count-label count-2-label"></div>
-            <div class="loader count-legend"></div>
-          </div>
-        `;
-
-      default:
-        return html`
-          <div class="count-container">
-            <div class="loader count count-3"></div>
-            <div class="loader count-label count-3-label"></div>
-            <div class="loader count-legend"></div>
-          </div>
-        `;
-    }
+    return html`
+      <div class="count-container">
+        <div class="loader count count-${this.variant + 1}"></div>
+        <div class="loader count-label count-${this.variant + 1}-label"></div>
+        <div class="loader count-legend"></div>
+      </div>
+    `;
   }
 }
 

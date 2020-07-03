@@ -30,11 +30,6 @@ export default class CountryDateItemSkeleton extends LitElement {
           margin-top: 8px;
           width: 40%;
         }
-
-        .graph {
-          height: 4px;
-          margin-top: 16px;
-        }
       `,
       darkThemeStyles,
     ];
@@ -46,7 +41,6 @@ export default class CountryDateItemSkeleton extends LitElement {
       <div class="loader header item"></div>
       <div class="loader date"></div>
       <div class="loader time"></div>
-      <div class="loader graph"></div>
     `;
   }
 }
