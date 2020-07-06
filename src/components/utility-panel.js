@@ -6,6 +6,7 @@ import '@material/mwc-icon';
 import './country-search-form';
 import './chip-button/sort-chip-button';
 import './chip-button/radio-chip-button';
+import './skeleton-loaders/utility-panel-count-skeleton';
 
 import darkThemeStyles from '../styles/dark-theme-styles';
 import fontStyles from '../styles/font-styles';
@@ -81,10 +82,11 @@ export default class UtilityPanel extends LitElement {
             margin: 24px 0;
           }
           .util-item {
-            margin: 16px 0;
+            margin: 0 0 16px 0;
           }
           .sticky {
             border-top: 1px var(--gray-300) solid;
+            border-radius: 16px 16px 0 0;
             bottom: 0;
             margin-left: 0;
             padding: 24px;
@@ -96,6 +98,9 @@ export default class UtilityPanel extends LitElement {
           }
           .util-item:last-child {
             margin-bottom: 0;
+          }
+          .search {
+            margin-bottom: 16px;
           }
         }
       `,
@@ -109,6 +114,7 @@ export default class UtilityPanel extends LitElement {
       isExpanded: { type: Boolean },
       isLoading: { type: Boolean },
       isMobile: { type: Boolean },
+      revertIcons: { type: Boolean },
       sort: { type: String },
       worldwide: { type: Object },
     };
@@ -121,6 +127,7 @@ export default class UtilityPanel extends LitElement {
     this.isExpanded = true;
     this.isLoading = false;
     this.isMobile = false;
+    this.revertIcons = false;
     this.sort = '';
     this.worldwide = {};
   }
@@ -129,13 +136,13 @@ export default class UtilityPanel extends LitElement {
     if (this.isMobile) {
       return html`
         <div class="sticky">
-          <div class="container">
+          <div class="container search">
             <div class="item search-form">
               ${this.renderSearchForm()}
             </div>
             <div class="item vcenter hcenter expand-icon-container">
               <mwc-icon @click="${this.handleIconClick}" class="primary-text">
-                ${this.isExpanded ? 'expand_less' : 'expand_more'}
+                ${this.renderToggleIcon()}
               </mwc-icon>
             </div>
           </div>
@@ -168,14 +175,14 @@ export default class UtilityPanel extends LitElement {
           </div>
         </div>
 
-        <div class="item util-item vertical coverage">
+        <div class="item util-item vertical">
           ${this.renderHeader('filter', 'by coverage')}
           <div class="container">
             ${this.renderFilterByCoverage()}
           </div>
         </div>
 
-        <div class="item util-item vertical coverage">
+        <div class="item util-item vertical">
           ${this.renderDataSource()}
         </div>
 
@@ -206,6 +213,13 @@ export default class UtilityPanel extends LitElement {
     `;
   }
 
+  renderToggleIcon() {
+    if (this.revertIcons) {
+      return this.isExpanded ? 'expand_less' : 'expand_more';
+    }
+    return this.isExpanded ? 'expand_more' : 'expand_less';
+  }
+
   renderCountDetails() {
     const [key, mode] = this.sort.split('-');
 
@@ -232,7 +246,10 @@ export default class UtilityPanel extends LitElement {
       `;
     }
 
-    return nothing;
+    return html`
+      <utility-panel-count-skeleton size=${this.isMobile ? 'sm' : 'md'}>
+      </utility-panel-count-skeleton>
+    `;
   }
 
   renderSortByCase() {
