@@ -53,6 +53,7 @@ export default class CountrySearchForm extends LitElement {
 
   static get properties() {
     return {
+      hasPlaceholder: { type: Boolean },
       readonly: { type: Boolean },
     };
   }
@@ -60,6 +61,7 @@ export default class CountrySearchForm extends LitElement {
   constructor() {
     super();
 
+    this.hasPlaceholder = false;
     this.readonly = false;
   }
 
@@ -74,6 +76,7 @@ export default class CountrySearchForm extends LitElement {
         <input
           class="primary-text"
           type="search"
+          placeholder=${this.hasPlaceholder ? 'search country...' : ''}
           @input="${debounceEvent(() => this.handleSearchQuery(this), 500)}"
           name="countrySearch"
           id="countrySearch"
