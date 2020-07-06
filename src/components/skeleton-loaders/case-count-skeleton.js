@@ -1,13 +1,11 @@
 import { LitElement, html, css } from 'lit-element';
 
 import darkThemeStyles from '../../styles/dark-theme-styles';
-import flexboxStyles from '../../styles/flexbox-styles';
 import skeletonStyles from './skeleton-loaders.styles';
 
 export default class CaseCountSkeleton extends LitElement {
   static get styles() {
     return [
-      flexboxStyles,
       skeletonStyles,
       css`
         .count-container {

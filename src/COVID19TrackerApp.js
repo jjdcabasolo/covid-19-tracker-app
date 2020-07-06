@@ -4,7 +4,7 @@ import { nothing } from 'lit-html';
 import './components/app-description';
 import './components/country-list-connected';
 import './components/utility-panel';
-import './components/worldwide-banner';
+import './components/worldwide-card';
 
 import darkThemeStyles from './styles/dark-theme-styles';
 import flexboxStyles from './styles/flexbox-styles';
@@ -159,7 +159,7 @@ export default class COVID19TrackerApp extends LitElement {
       ${this.isTablet ? this.renderUtilityBanner('top') : null}
 
       <div class="content">
-        ${this.renderWorldwideBanner()}
+        ${this.renderWorldwideCard()}
         <country-list-connected
           ?isMobile=${this.isMobile}
           @handle-coverage-update=${this.handleCoverageUpdate}
@@ -173,14 +173,14 @@ export default class COVID19TrackerApp extends LitElement {
     `;
   }
 
-  renderWorldwideBanner() {
+  renderWorldwideCard() {
     if (this.coverage.get(this.config.filter)) {
       return html`
-        <worldwide-banner
+        <worldwide-card
           .coverage=${this.coverage.get(this.config.filter)}
           ?isMobile=${this.isMobile}
           activeFilter=${this.config.sort}
-        ></worldwide-banner>
+        ></worldwide-card>
       `;
     }
 
@@ -196,6 +196,7 @@ export default class COVID19TrackerApp extends LitElement {
         .worldwide=${this.coverage.get(this.config.filter)}
         ?isLoading=${this.isLoading}
         ?isMobile=${this.isTablet}
+        ?revertIcons=${this.isMobile}
         @handle-search-query=${this.handleSearchQuery}
         @set-config=${this.setConfig}
         filter=${this.config.filter}
