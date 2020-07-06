@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 import { LitElement, html, css } from 'lit-element';
 import { nothing } from 'lit-html';
 
@@ -12,7 +13,12 @@ import flexboxStyles from '../styles/flexbox-styles';
 
 import filterByCoverage from '../constants/continents';
 import sortByCase from '../constants/utility';
-import { githubLink } from '../constants/links';
+import {
+  apiSportsLink,
+  covidAPILink,
+  githubLink,
+  rapidAPILink,
+} from '../constants/links';
 
 const FILTER = ['worldwide', ...filterByCoverage];
 
@@ -27,10 +33,10 @@ export default class UtilityPanel extends LitElement {
           color: var(--gray-700);
         }
         .util-container {
-          margin: 24px 0;
+          padding-left: 16px;
         }
         .util-item {
-          margin: 16px 0;
+          margin: 8px 0;
         }
         .util-item:first-child {
           margin-top: 0;
@@ -64,14 +70,21 @@ export default class UtilityPanel extends LitElement {
           position: sticky;
           top: 0;
           width: 100%;
-          z-index: 1;
+          z-index: 2;
         }
         .expand-icon-container {
           width: 40px;
           cursor: pointer;
         }
         @media screen and (max-width: 600px) {
+          .util-container {
+            margin: 24px 0;
+          }
+          .util-item {
+            margin: 16px 0;
+          }
           .sticky {
+            border-top: 1px var(--gray-300) solid;
             bottom: 0;
             margin-left: 0;
             padding: 24px;
@@ -122,7 +135,7 @@ export default class UtilityPanel extends LitElement {
             </div>
             <div class="item vcenter hcenter expand-icon-container">
               <mwc-icon @click="${this.handleIconClick}" class="primary-text">
-                ${this.isExpanded ? 'more_horiz' : 'expand_more'}
+                ${this.isExpanded ? 'expand_less' : 'expand_more'}
               </mwc-icon>
             </div>
           </div>
@@ -163,6 +176,10 @@ export default class UtilityPanel extends LitElement {
           </div>
         </div>
 
+        <div class="item util-item vertical coverage">
+          ${this.renderDataSource()}
+        </div>
+
         <div class="item util-item vertical footer">
           ${this.renderFooter()}
         </div>
@@ -183,8 +200,9 @@ export default class UtilityPanel extends LitElement {
   renderSearchForm() {
     return html`
       <country-search-form
-        ?readonly="${this.isLoading}"
-        @handle-search-query="${this.handleSearchQuery}"
+        ?readonly=${this.isLoading}
+        ?hasPlaceholder=${this.isMobile}
+        @handle-search-query=${this.handleSearchQuery}
       ></country-search-form>
     `;
   }
@@ -247,7 +265,19 @@ export default class UtilityPanel extends LitElement {
     );
   }
 
-  // eslint-disable-next-line class-methods-use-this
+  renderDataSource() {
+    return html`
+      <div class="small-text primary-text">
+        Data source:
+      </div>
+      <div class="small-text primary-text">
+        <a href=${apiSportsLink}>api-sports</a>'
+        <a href=${covidAPILink}>COVID-19 API</a>
+        at <a href=${rapidAPILink}>RapidAPI</a>.
+      </div>
+    `;
+  }
+
   renderFooter() {
     return html`
       <div class="primary-text small-text">COVID-19 Tracker</div>
