@@ -44,9 +44,12 @@ export default class COVID19TrackerApp extends LitElement {
           position: relative;
         }
         .right-panel-container {
+          align-items: center;
+          display: flex;
+          height: 100vh;
           position: fixed;
-          padding-left: 16px;
-          max-width: 15vw;
+          top: 0;
+          width: 250px;
         }
         @media screen and (max-width: 600px) {
           main {
@@ -63,7 +66,7 @@ export default class COVID19TrackerApp extends LitElement {
       config: { type: Object },
       coverage: { type: Map },
       error: { type: String },
-      isDesktop: { type: Boolean },
+      isTablet: { type: Boolean },
       isLoading: { type: Boolean },
       isMobile: { type: Boolean },
       query: { type: String },
@@ -81,7 +84,7 @@ export default class COVID19TrackerApp extends LitElement {
     };
     this.coverage = new Map();
     this.error = '';
-    this.isDesktop = window.innerWidth < TABLET;
+    this.isTablet = window.innerWidth < TABLET;
     this.isLoading = true;
     this.isMobile = window.innerWidth < MOBILE;
     this.query = '';
@@ -112,7 +115,7 @@ export default class COVID19TrackerApp extends LitElement {
       `;
     }
 
-    if (this.isDesktop) {
+    if (this.isTablet) {
       return html`
         <main>
           ${this.renderCountryList()}
@@ -153,7 +156,7 @@ export default class COVID19TrackerApp extends LitElement {
         <app-description></app-description>
       </div>
 
-      ${this.isDesktop ? this.renderUtilityBanner('top') : null}
+      ${this.isTablet ? this.renderUtilityBanner('top') : null}
 
       <div class="content">
         ${this.renderWorldwideBanner()}
@@ -192,7 +195,7 @@ export default class COVID19TrackerApp extends LitElement {
       <utility-panel
         .worldwide=${this.coverage.get(this.config.filter)}
         ?isLoading=${this.isLoading}
-        ?isMobile=${this.isDesktop}
+        ?isMobile=${this.isTablet}
         @handle-search-query=${this.handleSearchQuery}
         @set-config=${this.setConfig}
         filter=${this.config.filter}
@@ -204,7 +207,7 @@ export default class COVID19TrackerApp extends LitElement {
   static handleResize(context) {
     // eslint-disable-next-line no-param-reassign
     context.isMobile = window.innerWidth < MOBILE;
-    context.isDesktop = window.innerWidth < TABLET;
+    context.isTablet = window.innerWidth < TABLET;
   }
 
   handleSearchQuery({ detail }) {
