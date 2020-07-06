@@ -6,7 +6,7 @@ import './country-date-item';
 import darkThemeStyles from '../styles/dark-theme-styles';
 import flexboxStyles from '../styles/flexbox-styles';
 
-export default class WorldwideBanner extends LitElement {
+export default class WorldwideCard extends LitElement {
   static get styles() {
     return [
       flexboxStyles,
@@ -122,4 +122,4 @@ export default class WorldwideBanner extends LitElement {
   }
 }
 
-customElements.define('worldwide-banner', WorldwideBanner);
+customElements.define('worldwide-card', WorldwideCard);
