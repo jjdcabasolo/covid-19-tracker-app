@@ -154,12 +154,11 @@ export default class UtilityPanel extends LitElement {
         ${this.isMobile
           ? nothing
           : html`
+              ${this.renderCountDetails()}
               <div class="item util-item vertical">
                 ${this.renderHeader('search', 'by country')}
                 <div>${this.renderSearchForm()}</div>
               </div>
-
-              ${this.renderCountDetails()}
             `}
 
         <div class="item util-item vertical">
