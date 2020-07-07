@@ -33,6 +33,15 @@ export default css`
     .input-container {
       background-color: var(--dark-theme-html-bg);
     }
+    @media screen and (max-width: 600px) {
+      input[name='countrySearch'] {
+        background-color: var(--gray-900);
+        border: none;
+      }
+      .input-container {
+        background-color: var(--gray-900);
+      }
+    }
 
     /* chip-button.js */
     .chip-button {
@@ -48,6 +57,12 @@ export default css`
     .sticky {
       background-color: var(--dark-theme-html-bg);
       border-bottom: 1px var(--gray-700) solid;
+    }
+    @media screen and (max-width: 600px) {
+      .sticky {
+        background-color: var(--gray-900);
+        border-top: 1px var(--gray-900) solid;
+      }
     }
 
     /* app-description.js */

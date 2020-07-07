@@ -1,12 +1,12 @@
+/* eslint-disable class-methods-use-this */
 import { LitElement, html, css } from 'lit-element';
 
 import '@material/mwc-icon';
 
-import darkThemeStyles from '../styles/dark-theme-styles';
-import flexboxStyles from '../styles/flexbox-styles';
-import fontStyles from '../styles/font-styles';
-import legendStyles from '../styles/legend-styles';
-
+import darkThemeStyles from '../../styles/dark-theme-styles';
+import flexboxStyles from '../../styles/flexbox-styles';
+import fontStyles from '../../styles/font-styles';
+import legendStyles from '../../styles/legend-styles';
 
 export default class ChipButton extends LitElement {
   static get styles() {
@@ -14,6 +14,9 @@ export default class ChipButton extends LitElement {
       flexboxStyles,
       fontStyles,
       css`
+        :host {
+          margin-right: 8px;
+        }
         .chip-button {
           border-radius: 24px;
           border-style: solid;
@@ -29,17 +32,15 @@ export default class ChipButton extends LitElement {
           margin-right: 2px;
         }
         .inactive-chip {
-          padding-left: 12px;
           border-color: var(--light-theme-divider-color);
+          color: var(--light-theme-divider-color);
+          padding-left: 12px;
         }
         .active-no-icon {
           padding-left: 12px;
         }
         .label {
           user-select: none;
-        }
-        :host {
-          margin-right: 8px;
         }
       `,
       darkThemeStyles,
@@ -79,16 +80,18 @@ export default class ChipButton extends LitElement {
 
   // returns icon (if there is any)
   renderIcon() {
-    return this;
+    return null;
   }
 
   // button click implementation
   handleClick() {
-    return this;
+    return null;
   }
 
   // evaluate if button is inactive
   evaluateInactive() {
-    return this;
+    return null;
   }
 }
+
+customElements.define('chip-button', ChipButton);

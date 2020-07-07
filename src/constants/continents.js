@@ -1,9 +1,8 @@
 export default [
-  'europe',
-  'asia',
-  'north america',
-  'south america',
   'africa',
+  'asia',
+  'europe',
+  'north america',
   'oceania',
-  'australia',
+  'south america',
 ];

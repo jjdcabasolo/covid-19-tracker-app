@@ -3,13 +3,13 @@ import { css } from 'lit-element';
 export default css`
   /* size */
   .small-text {
-    font-size: 12px;
+    font-size: 0.8rem;
   }
   .medium-text {
-    font-size: 16px;
+    font-size: 1.25rem;
   }
   .large-text {
-    font-size: 24px;
+    font-size: 1.5rem;
   }
 
   /* color */

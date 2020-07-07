@@ -1,7 +1,6 @@
 import merge from 'deepmerge';
 // use createSpaConfig for bundling a Single Page App
 import { createSpaConfig } from '@open-wc/building-rollup';
-import { generateSW } from 'rollup-plugin-workbox';
 
 import copy from 'rollup-plugin-copy';
 
@@ -14,7 +13,7 @@ const baseConfig = createSpaConfig({
 
   // if you need to support older browsers, such as IE11, set the legacyBuild
   // option to generate an additional build just for this browser
-  // legacyBuild: true,
+  legacyBuild: true,
 
   // development mode creates a non-minified build for debugging or development
   developmentMode: process.env.ROLLUP_WATCH === 'true',
@@ -34,11 +33,6 @@ export default merge(baseConfig, {
         { src: 'index.css', dest: 'build/' },
         { src: 'manifest.json', dest: 'build/' },
       ],
-    }),
-    generateSW({
-      globDirectory: 'build/',
-      globPatterns: ['**/*.{html,json,js,css}'],
-      swDest: 'build/sw.js',
     }),
   ],
 

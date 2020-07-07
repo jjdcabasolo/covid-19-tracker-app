@@ -48,9 +48,7 @@
     "prettier": "^2.0.4",
     "rimraf": "^2.6.3",
     "rollup": "^2.3.4",
-    "rollup-plugin-copy": "^3.3.0",
-    "rollup-plugin-minify-html-literals": "^1.2.3",
-    "rollup-plugin-workbox": "^5.0.1"
+    "rollup-plugin-copy": "^3.3.0"
   },
   "eslintConfig": {
     "extends": [

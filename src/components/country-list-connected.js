@@ -20,7 +20,6 @@ export default class CountryListConnected extends CountryList {
     const simpleCrypto = new SimpleCrypto(apiPassphrase || process.env.API_PASSPHRASE);
     const decryptedKey = simpleCrypto.decrypt(key);
 
-    this.updateIsFetching(true);
     try {
       const response = await fetch(url, {
         method: 'GET',
@@ -45,39 +44,41 @@ export default class CountryListConnected extends CountryList {
         }),
       );
     } finally {
-      this.updateIsFetching(false);
-    }
-  }
+      this.dispatchEvent(
+        new CustomEvent('update-is-fetching', {
+          detail: {
+            isLoading: false,
+          },
+        }),
+      );
 
-  updateIsFetching(isFetching) {
-    this.dispatchEvent(
-      new CustomEvent('handle-fetching', {
-        detail: {
-          isFetching,
-        },
-      }),
-    );
+      // this.getUserPreference();
+    }
   }
 
   extractData() {
     const data = [...this.countries];
-
     const extractedCountries = [];
-    const extractedContinents = [];
-    let extractedWorldwide = {};
+    const extractedContinents = new Map();
+    const countryCount = new Map();
 
     data.forEach((item) => {
       const formattedCountryName = formatCountryName(item.country);
+      const formattedContinent = formatCountryName((item.continent) || 'no continent');
+      const displayName = formatCountryName(item.country, false);
 
       if (continents.includes(formattedCountryName)) {
-        extractedContinents.push(item);
-
-        // https://www.quora.com/Which-continent-is-called-both-a-continent-and-a-country
-        if (formattedCountryName === 'australia') {
-          extractedCountries.push(item);
-        }
+        extractedContinents.set(formattedCountryName, {
+          ...item,
+          country: displayName,
+          continent: displayName,
+        });
       } else if (formattedCountryName === 'all') {
-        extractedWorldwide = { ...item };
+        extractedContinents.set('worldwide', {
+          ...item,
+          country: 'Worldwide',
+          continent: 'Worldwide',
+        });
       } else {
         const newItem = { ...item };
 
@@ -86,21 +87,77 @@ export default class CountryListConnected extends CountryList {
           newItem.country = 'South Korea';
         }
 
+        countryCount.set(formattedContinent, (countryCount.get(formattedContinent) || 0) + 1);
         extractedCountries.push(newItem);
       }
     });
 
-    this.continents = [...extractedContinents];
+    extractedContinents.forEach((value, key) => {
+      const count = key === 'worldwide' ? extractedCountries.length : countryCount.get(key);
+
+      extractedContinents.set(key, {
+        ...value,
+        countryCount: count,
+      });
+    });
+
     this.countries = [...extractedCountries];
 
     this.dispatchEvent(
-      new CustomEvent('handle-worldwide-update', {
+      new CustomEvent('handle-coverage-update', {
         detail: {
-          worldwide: { ...extractedWorldwide },
+          coverage: extractedContinents,
         },
       }),
     );
   }
+
+  // upcoming feature: country pinning
+  // async getUserPreference() {
+  //   const userPref = localStorage.getItem('preference');
+
+  //   if (userPref) {
+  //     this.preference = [...this.preference, ...userPref.split(',')];
+  //     return;
+  //   }
+
+  //   try {
+  //     const response = await fetch('https://freegeoip.app/json/', {
+  //       method: 'GET',
+  //       headers: {
+  //         accept: 'application/json',
+  //         'content-type': 'application/json',
+  //       },
+  //     });
+
+  //     if (response.status !== 200) throw response;
+
+  //     const toJSON = await response.json();
+  //     const country = toJSON.country_name.toLowerCase();
+
+  //     localStorage.setItem('preference', country);
+  //     this.preference = [...this.preference, country];
+  //   } catch (e) {
+  //     // this.dispatchEvent(
+  //     //   new CustomEvent('handle-error', {
+  //     //     detail: {
+  //     //       error: `
+  //     //         Failed to load 😞
+  //     //         ${e.status}: ${e.statusText}
+  //     //       `,
+  //     //     },
+  //     //   }),
+  //     // );
+  //   } finally {
+  //     // this.dispatchEvent(
+  //     //   new CustomEvent('update-is-fetching', {
+  //     //     detail: {
+  //     //       isLoading: false,
+  //     //     },
+  //     //   }),
+  //     // );
+  //   }
+  // }
 }
 
 customElements.define('country-list-connected', CountryListConnected);

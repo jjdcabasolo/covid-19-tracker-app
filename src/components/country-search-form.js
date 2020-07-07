@@ -5,6 +5,7 @@ import '@material/mwc-icon';
 import darkThemeStyles from '../styles/dark-theme-styles';
 import fontStyles from '../styles/font-styles';
 
+import debounceEvent from '../utils/debounce';
 
 export default class CountrySearchForm extends LitElement {
   static get styles() {
@@ -15,31 +16,37 @@ export default class CountrySearchForm extends LitElement {
           position: relative;
         }
         input[name='countrySearch'] {
-          border-color: var(--light-theme-divider-color);
-          border-radius: 2px;
-          border-style: solid;
-          border-width: 1px;
+          background-color: transparent;
+          border-radius: 4px;
+          border: 1px solid var(--gray-300);
           box-sizing: border-box;
           font-family: 'Roboto Mono', monospace;
-          padding: 8px 16px 8px 52px;
+          font-size: 14px;
+          padding: 8px 16px 8px 36px;
           width: 100%;
         }
         .search-icon {
+          left: 8px;
           position: absolute;
-          left: 16px;
-          top: 8px;
+          top: 7px;
+        }
+        .disabled {
+          pointer-events: none;
+        }
+        label {
+          display: none;
         }
         @media screen and (max-width: 600px) {
           .input-container {
             position: static;
           }
           input[name='countrySearch'] {
-            padding: 8px 8px 8px 42px;
+            padding: 8px 8px 8px 32px;
           }
           .search-icon {
             --mdc-icon-size: 16px;
-            left: 40px;
-            top: 36px;
+            left: 34px;
+            top: 34px;
           }
         }
       `,
@@ -47,41 +54,40 @@ export default class CountrySearchForm extends LitElement {
     ];
   }
 
+  static get properties() {
+    return {
+      hasPlaceholder: { type: Boolean },
+      readonly: { type: Boolean },
+    };
+  }
+
+  constructor() {
+    super();
+
+    this.hasPlaceholder = false;
+    this.readonly = false;
+  }
+
   render() {
     return html`
-      <div class="input-container">
+      <div class="input-container ${this.readonly ? 'disabled' : ''}">
         <mwc-icon
           class="search-icon primary-text"
           @click="${this.handleIconClick}"
           >search</mwc-icon
         >
+        <label for="countrySearch">Label</label>
         <input
-          class="medium-text primary-text"
-          placeholder="Search country..."
-          type="search"
-          @input="${this.debounceEvent(
-    () => this.handleSearchQuery(this),
-    500,
-  )}"
-          name="countrySearch"
+          @input="${debounceEvent(() => this.handleSearchQuery(this), 500)}"
+          aria-labelledby="countrySearch"
+          class="primary-text"
           id="countrySearch"
+          name="countrySearch"
+          placeholder=${this.hasPlaceholder ? 'search country...' : ''}
+          type="search"
         />
-        <label for="countrySearch"></label>
       </div>
     `;
-  }
-
-  // code taken from: https://gist.github.com/nmsdvid/8807205
-  // eslint-disable-next-line class-methods-use-this
-  debounceEvent(callback, time) {
-    let interval;
-    return (...args) => {
-      clearTimeout(interval);
-      interval = setTimeout(() => {
-        interval = null;
-        callback(...args);
-      }, time);
-    };
   }
 
   handleSearchQuery(e) {
@@ -90,12 +96,13 @@ export default class CountrySearchForm extends LitElement {
     this.dispatchEvent(
       new CustomEvent('handle-search-query', {
         detail: { query },
-      }),
+      })
     );
   }
 
   handleIconClick() {
     const input = this.shadowRoot.getElementById('countrySearch');
+
     input.focus();
   }
 }
