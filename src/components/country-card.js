@@ -89,7 +89,9 @@ export default class CountryCard extends LitElement {
     const { total: tests } = t;
 
     const testPercentage =
-      tests / population > -1 ? ((tests / population) * 100).toFixed(2) : 0;
+      tests / population > 0 && population > 0
+        ? ((tests / population) * 100).toFixed(2)
+        : 0;
 
     return html`
       <div class="card">
