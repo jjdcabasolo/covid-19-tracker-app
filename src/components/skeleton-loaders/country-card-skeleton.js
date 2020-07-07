@@ -43,7 +43,10 @@ export default class CountryCardSkeleton extends LitElement {
             .fill('')
             .map(
               (_, i) => html`
-                <case-count-skeleton variant=${i}></case-count-skeleton>
+                <case-count-skeleton
+                  hasMarginTop
+                  variant=${i}
+                ></case-count-skeleton>
               `
             )}
         </div>

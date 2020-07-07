@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit-element';
-
 import { nothing } from 'lit-html';
+
 import darkThemeStyles from '../../styles/dark-theme-styles';
 import skeletonStyles from './skeleton-loaders.styles';
 
