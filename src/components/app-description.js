@@ -25,11 +25,16 @@ export default class AppDescription extends LitElement {
           -webkit-touch-callout: none;
           -webkit-user-select: none;
           cursor: pointer;
-          margin-right: 8px;
           user-select: none;
         }
         .container {
           flex-wrap: nowrap;
+        }
+        .random-button-container {
+          width: 40px;
+          margin-right: 8px;
+          height: 40px;
+          cursor: pointer;
         }
       `,
       darkThemeStyles,
@@ -59,7 +64,7 @@ export default class AppDescription extends LitElement {
   render() {
     return html`
       <div class="container">
-        <div class="item vcenter">
+        <div class="item vcenter hcenter random-button-container">
           <mwc-icon class="primary-text" @click="${this.handleIconClick}">
             keyboard_arrow_right
           </mwc-icon>

@@ -12,14 +12,19 @@ export default [
 
   html`
     <div class="small-text primary-text">
-      Night mode 🌓 depends on your device's theme preference. Try toggling it!
+      Night mode 🌓 depends on your browser's theme preference. Try toggling it!
     </div>
   `,
 
   html`
     <div class="small-text primary-text">
-      Shoutout to my design consultants/app testers: Kharisa, Jemil, Camille,
-      Blessy, and RC 😍
+      Shoutout to my design consultants: Kharisa, Blessy, and RC 😍
+    </div>
+  `,
+
+  html`
+    <div class="small-text primary-text">
+      Shoutout to my app testers: Jemil and Camille 😍
     </div>
   `,
 
@@ -47,6 +52,12 @@ export default [
     <div class="small-text primary-text">
       Noticed something wrong? Send it here at my
       <a href="mailto:abasolojohnjourish@gmail.com">email</a>.
+    </div>
+  `,
+
+  html`
+    <div class="small-text primary-text">
+      Night mode 🌓 depends on your browser's theme preference. Try toggling it!
     </div>
   `,
 ];

@@ -7,6 +7,6 @@ export const githubLink = 'https://github.com/jjdcabasolo';
 
 export const apiSportsLink = 'https://rapidapi.com/user/api-sports';
 
-export const covidAPILink = 'https://rapidapi.com/api-sports/api/covid-193';
+export const covidAPILink = 'https://api-sports.io/documentation/covid-19';
 
 export const rapidAPILink = 'https://rapidapi.com/';
