@@ -33,17 +33,20 @@ export default class CountrySearchForm extends LitElement {
         .disabled {
           pointer-events: none;
         }
+        label {
+          display: none;
+        }
         @media screen and (max-width: 600px) {
           .input-container {
             position: static;
           }
           input[name='countrySearch'] {
-            padding: 8px 8px 8px 42px;
+            padding: 8px 8px 8px 32px;
           }
           .search-icon {
             --mdc-icon-size: 16px;
-            left: 40px;
-            top: 36px;
+            left: 34px;
+            top: 34px;
           }
         }
       `,
@@ -73,15 +76,16 @@ export default class CountrySearchForm extends LitElement {
           @click="${this.handleIconClick}"
           >search</mwc-icon
         >
+        <label for="countrySearch">Label</label>
         <input
-          class="primary-text"
-          type="search"
-          placeholder=${this.hasPlaceholder ? 'search country...' : ''}
           @input="${debounceEvent(() => this.handleSearchQuery(this), 500)}"
-          name="countrySearch"
+          aria-labelledby="countrySearch"
+          class="primary-text"
           id="countrySearch"
+          name="countrySearch"
+          placeholder=${this.hasPlaceholder ? 'search country...' : ''}
+          type="search"
         />
-        <label for="countrySearch"></label>
       </div>
     `;
   }

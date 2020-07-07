@@ -25,6 +25,11 @@ export default class CountryList extends LitElement {
           position: absolute;
           bottom: 0;
         }
+        @media screen and (max-width: 600px) {
+          p {
+            height: 20vh;
+          }
+        }
       `,
       fontStyles,
     ];

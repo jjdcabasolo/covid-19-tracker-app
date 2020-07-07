@@ -1,8 +1,8 @@
 import { LitElement, html, css } from 'lit-element';
-import { nothing } from 'lit-html';
 
 import './components/app-description';
 import './components/country-list-connected';
+import './components/skeleton-loaders/worldwide-card-skeleton';
 import './components/utility-panel';
 import './components/worldwide-card';
 
@@ -29,7 +29,7 @@ export default class COVID19TrackerApp extends LitElement {
           margin: 0;
         }
         .content {
-          margin: 16px 0;
+          margin: 8px 0;
         }
         .left-panel {
           flex-basis: 75%;
@@ -49,9 +49,12 @@ export default class COVID19TrackerApp extends LitElement {
           height: 100vh;
           position: fixed;
           top: 0;
-          width: 250px;
+          width: 260px;
         }
         @media screen and (max-width: 600px) {
+          .content {
+            margin: 16px 0;
+          }
           main {
             padding-bottom: 0;
           }
@@ -184,7 +187,11 @@ export default class COVID19TrackerApp extends LitElement {
       `;
     }
 
-    return nothing;
+    return html`
+      <worldwide-card-skeleton
+        ?isMobile=${this.isMobile}
+      ></worldwide-card-skeleton>
+    `;
   }
 
   renderUtilityBanner(location) {

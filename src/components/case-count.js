@@ -18,8 +18,11 @@ export default class CaseCount extends LitElement {
           letter-spacing: 0.25px;
         }
         .new-count {
-          letter-spacing: 0.25px;
           font-weight: 400;
+          letter-spacing: 0.25px;
+        }
+        .subtitle {
+          margin: 2px 0 6px 0;
         }
         .item {
           margin-right: 8px;
@@ -101,19 +104,19 @@ export default class CaseCount extends LitElement {
       </div>
     `;
 
-    if (this.subvalue !== 'NaN') {
-      if (this.isInline) {
-        return subvalueItem;
-      }
-
-      return html`
-        <div class="item ${this.isCentered ? 'hcenter remove-margin' : ''}">
-          ${subvalueItem}
-        </div>
-      `;
+    if (this.subvalue === 'NaN' || this.subvalue === '0') {
+      return nothing;
     }
 
-    return nothing;
+    if (this.isInline) {
+      return subvalueItem;
+    }
+
+    return html`
+      <div class="item ${this.isCentered ? 'hcenter remove-margin' : ''}">
+        ${subvalueItem}
+      </div>
+    `;
   }
 
   renderLegend() {

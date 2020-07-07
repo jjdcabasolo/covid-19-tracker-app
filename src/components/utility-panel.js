@@ -102,6 +102,9 @@ export default class UtilityPanel extends LitElement {
           .search {
             margin-bottom: 16px;
           }
+          .util-skeleton {
+            margin-top: 16px;
+          }
         }
       `,
       darkThemeStyles,
@@ -157,15 +160,19 @@ export default class UtilityPanel extends LitElement {
 
   renderUtility() {
     return html`
-      <div class="container ${this.isMobile ? '' : 'util-container'} vertical">
+      <div
+        class="container ${this.isMobile
+          ? 'util-skeleton'
+          : 'util-container'} vertical"
+      >
         ${this.isMobile
           ? nothing
           : html`
-              ${this.renderCountDetails()}
               <div class="item util-item vertical">
                 ${this.renderHeader('search', 'by country')}
                 <div>${this.renderSearchForm()}</div>
               </div>
+              ${this.renderCountDetails()}
             `}
 
         <div class="item util-item vertical">
