@@ -19,3 +19,7 @@
 /_site/
 
 .env
+/build
+service-worker.*
+workbox-*.*
+*.todo
