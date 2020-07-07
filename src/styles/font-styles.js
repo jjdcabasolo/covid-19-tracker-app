@@ -3,7 +3,7 @@ import { css } from 'lit-element';
 export default css`
   /* size */
   .small-text {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
   }
   .medium-text {
     font-size: 1.25rem;
