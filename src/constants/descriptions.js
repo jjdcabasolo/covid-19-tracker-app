@@ -1,6 +1,6 @@
 import { html } from 'lit-element';
 
-import { figmaLink, linkedInLink } from './links';
+import { figmaLink, historyLink } from './links';
 
 export default [
   html`
@@ -12,19 +12,28 @@ export default [
 
   html`
     <div class="small-text primary-text">
-      Night mode 🌓 depends on your browser's theme preference. Try toggling it!
+      Night mode 🌓 depends on your device/browser's theme preference. Try
+      toggling it!
     </div>
   `,
 
   html`
     <div class="small-text primary-text">
-      Shoutout to my design consultants: Kharisa, Blessy, and RC 😍
+      Shoutout to my UI/UX consultants: Kharisa, Blessy, and RC 😍
     </div>
   `,
 
   html`
     <div class="small-text primary-text">
       Shoutout to my app testers: Jemil and Camille 😍
+    </div>
+  `,
+
+  html`
+    <div class="small-text primary-text">
+      Thank you to
+      <a href=${historyLink}>the web developers at my current employer</a> that
+      reviewed my code 😍
     </div>
   `,
 
@@ -43,21 +52,8 @@ export default [
 
   html`
     <div class="small-text primary-text">
-      Here's my <a href=${linkedInLink}>LinkedIn</a> account. Nothing, just
-      saying. 😉
-    </div>
-  `,
-
-  html`
-    <div class="small-text primary-text">
-      Noticed something wrong? Send it here at my
-      <a href="mailto:abasolojohnjourish@gmail.com">email</a>.
-    </div>
-  `,
-
-  html`
-    <div class="small-text primary-text">
-      Night mode 🌓 depends on your browser's theme preference. Try toggling it!
+      Data may not be 100% accurate. It's a free API, so please bear with the
+      API provider 😅
     </div>
   `,
 ];
