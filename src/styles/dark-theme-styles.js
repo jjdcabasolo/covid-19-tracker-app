@@ -51,6 +51,11 @@ export default css`
       }
     }
 
+    /* utility-panel.js */
+    .expand-icon-container {
+      border: 1px solid var(--gray-700);
+    }
+
     /* chip-button.js */
     .chip-button {
       border-color: var(--dark-theme-primary-color);

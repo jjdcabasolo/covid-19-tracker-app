@@ -65,17 +65,21 @@ export default class UtilityPanel extends LitElement {
         .sticky {
           background-color: var(--light-theme-background-color);
           border-bottom: 1px var(--gray-300) solid;
+          height: auto;
           margin-left: -8px;
           padding: 24px 8px 16px 8px;
           position: -webkit-sticky;
           position: sticky;
           top: 0;
+          transition: height 2s;
           width: 100%;
           z-index: 2;
         }
         .expand-icon-container {
-          width: 40px;
+          border-radius: 4px;
+          border: 1px solid var(--gray-400);
           cursor: pointer;
+          width: 40px;
         }
         @media screen and (max-width: 600px) {
           .util-container {

@@ -61,7 +61,7 @@ export default class COVID19TrackerApp extends LitElement {
           }
           .mobile-spacer {
             width: 100%;
-            height: 20vh;
+            height: 50vh;
           }
         }
       `,

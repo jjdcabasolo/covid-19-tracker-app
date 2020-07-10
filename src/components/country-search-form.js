@@ -18,7 +18,7 @@ export default class CountrySearchForm extends LitElement {
         input[name='countrySearch'] {
           background-color: transparent;
           border-radius: 4px;
-          border: 1px solid var(--gray-300);
+          border: 1px solid var(--gray-400);
           box-sizing: border-box;
           font-family: 'Roboto Mono', monospace;
           font-size: 14px;
