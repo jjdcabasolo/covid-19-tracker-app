@@ -169,6 +169,7 @@ export default class CountryList extends LitElement {
 
   filterSearchQuery() {
     const filteredItems = this.countries
+      // coverage filtering
       .filter(e => {
         if (this.filter === 'worldwide') return e;
 
@@ -178,6 +179,7 @@ export default class CountryList extends LitElement {
 
         return trimmedContinent === this.filter;
       })
+      // case count sorting
       .sort((a, b) => {
         const [key, mode] = this.sort.split('-');
         const isAsc = mode === 'asc';
@@ -209,15 +211,17 @@ export default class CountryList extends LitElement {
         if (isAsc) return current - next;
         return next - current;
       })
+      // rank inclusion
       .map((e, i) => ({
         ...e,
         position: i,
       }))
+      // search filtering
       .filter(e => {
         const trimmedCountry = formatCountryName(e.country);
         const trimmedQuery = formatCountryName(this.query);
 
-        return trimmedCountry.includes(trimmedQuery);
+        return trimmedCountry.indexOf(trimmedQuery) === 0;
       });
 
     return filteredItems;
