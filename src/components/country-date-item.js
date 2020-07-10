@@ -17,12 +17,16 @@ export default class CountryDateItem extends LitElement {
       fontStyles,
       flexboxStyles,
       css`
+        .container {
+          flex-wrap: nowrap;
+        }
         .country {
+          flex-grow: 1;
           font-weight: 400;
-          margin-right: 8px;
         }
         img {
-          height: 24px;
+          height: 2.25rem;
+          margin-top: -5px;
         }
         .date {
           margin-top: 4px;
@@ -63,7 +67,7 @@ export default class CountryDateItem extends LitElement {
 
     return html`
       <div class="container">
-        <div class="item country medium-text primary-text ">
+        <div class="item country large-text primary-text">
           ${this.processCountryNames()}
         </div>
         <div class="item">
