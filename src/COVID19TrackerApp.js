@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit-element';
+import { nothing } from 'lit-html';
 
 import './components/app-description';
 import './components/country-list-connected';
@@ -57,6 +58,10 @@ export default class COVID19TrackerApp extends LitElement {
           }
           main {
             padding-bottom: 0;
+          }
+          .mobile-spacer {
+            width: 100%;
+            height: 20vh;
           }
         }
       `,
@@ -123,6 +128,7 @@ export default class COVID19TrackerApp extends LitElement {
         <main>
           ${this.renderCountryList()}
         </main>
+        ${this.isMobile ? html`<div class="mobile-spacer"></div>` : nothing}
         ${this.renderUtilityBanner('bottom')}
       `;
     }
@@ -150,6 +156,11 @@ export default class COVID19TrackerApp extends LitElement {
   }
 
   renderCountryList() {
+    let worldwide = this.renderWorldwideCard();
+    if (this.isMobile && this.query.length > 0) {
+      worldwide = nothing;
+    }
+
     return html`
       <div class="content">
         ${APP_TITLE}
@@ -162,7 +173,7 @@ export default class COVID19TrackerApp extends LitElement {
       ${this.isTablet ? this.renderUtilityBanner('top') : null}
 
       <div class="content">
-        ${this.renderWorldwideCard()}
+        ${worldwide}
         <country-list-connected
           ?isMobile=${this.isMobile}
           @handle-coverage-update=${this.handleCoverageUpdate}

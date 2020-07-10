@@ -64,22 +64,14 @@ export default class UtilityPanel extends LitElement {
         }
         .sticky {
           background-color: var(--light-theme-background-color);
+          border-bottom: 1px var(--gray-300) solid;
+          margin-left: -8px;
           padding: 24px 8px 16px 8px;
           position: -webkit-sticky;
           position: sticky;
+          top: 0;
+          width: 100%;
           z-index: 2;
-        }
-        :host([sort='cases-desc']) .sticky,
-        :host([sort='cases-asc']) .sticky {
-          background-color: var(--amber-50);
-        }
-        :host([sort='deaths-desc']) .sticky,
-        :host([sort='deaths-asc']) .sticky {
-          background-color: var(--deep-orange-50);
-        }
-        :host([sort='recoveries-desc']) .sticky,
-        :host([sort='recoveries-asc']) .sticky {
-          background-color: var(--light-green-50);
         }
         .expand-icon-container {
           width: 40px;
@@ -98,6 +90,20 @@ export default class UtilityPanel extends LitElement {
             bottom: 0;
             margin-left: 0;
             padding: 24px;
+            top: unset;
+            width: unset;
+          }
+          :host([sort='cases-desc']) .sticky,
+          :host([sort='cases-asc']) .sticky {
+            background-color: var(--amber-50);
+          }
+          :host([sort='deaths-desc']) .sticky,
+          :host([sort='deaths-asc']) .sticky {
+            background-color: var(--deep-orange-50);
+          }
+          :host([sort='recoveries-desc']) .sticky,
+          :host([sort='recoveries-asc']) .sticky {
+            background-color: var(--light-green-50);
           }
           .coverage {
             margin: 0;
@@ -298,11 +304,10 @@ export default class UtilityPanel extends LitElement {
     return html`
       <div class="small-text primary-text">
         The figures are taken from
-      </div>
-      <div class="small-text primary-text">
         <a href=${apiSportsLink}>api-sports</a>'
         <a href=${covidAPILink}>COVID-19 API</a>
-        at <a href=${rapidAPILink}>RapidAPI</a>.
+        at <a href=${rapidAPILink}>RapidAPI</a>. Data may not be 100% accurate.
+        It's a free API, so please bear with the API provider 😅
       </div>
     `;
   }
