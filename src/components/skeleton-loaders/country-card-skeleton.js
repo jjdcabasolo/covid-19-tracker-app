@@ -39,7 +39,7 @@ export default class CountryCardSkeleton extends LitElement {
       <div class="card">
         <div class="loader-container">
           <country-date-item-skeleton></country-date-item-skeleton>
-          ${Array(4)
+          ${Array(3)
             .fill('')
             .map(
               (_, i) => html`
