@@ -114,7 +114,7 @@ export default class CountryDateItem extends LitElement {
         <img
           alt="The National Flag of ${this.country}."
           class="country-flag"
-          src="https://www.countryflags.io/${code}/shiny/24.png"
+          src="https://www.countryflags.io/${code}/shiny/48.png"
         />
       `;
     }
