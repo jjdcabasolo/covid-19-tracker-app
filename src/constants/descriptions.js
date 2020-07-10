@@ -32,8 +32,8 @@ export default [
   html`
     <div class="small-text primary-text">
       Thank you to
-      <a href=${historyLink}>the web developers at my current employer</a> that
-      reviewed my code 😍
+      <a href=${historyLink}>the web developers</a> that reviewed my code for
+      our final presentation 😍
     </div>
   `,
 
