@@ -64,14 +64,22 @@ export default class UtilityPanel extends LitElement {
         }
         .sticky {
           background-color: var(--light-theme-background-color);
-          border-bottom: 1px var(--gray-300) solid;
-          margin-left: -8px;
           padding: 24px 8px 16px 8px;
           position: -webkit-sticky;
           position: sticky;
-          top: 0;
-          width: 100%;
           z-index: 2;
+        }
+        :host([sort='cases-desc']) .sticky,
+        :host([sort='cases-asc']) .sticky {
+          background-color: var(--amber-50);
+        }
+        :host([sort='deaths-desc']) .sticky,
+        :host([sort='deaths-asc']) .sticky {
+          background-color: var(--deep-orange-50);
+        }
+        :host([sort='recoveries-desc']) .sticky,
+        :host([sort='recoveries-asc']) .sticky {
+          background-color: var(--light-green-50);
         }
         .expand-icon-container {
           width: 40px;
@@ -85,13 +93,11 @@ export default class UtilityPanel extends LitElement {
             margin: 0 0 16px 0;
           }
           .sticky {
-            border-top: 1px var(--gray-300) solid;
+            border-top: none;
             border-radius: 16px 16px 0 0;
             bottom: 0;
             margin-left: 0;
             padding: 24px;
-            top: unset;
-            width: unset;
           }
           .coverage {
             margin: 0;
