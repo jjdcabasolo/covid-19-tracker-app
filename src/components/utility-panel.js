@@ -245,8 +245,8 @@ export default class UtilityPanel extends LitElement {
             ${continent === 'Worldwide'
               ? continent.toLowerCase()
               : `in ${continent}`}
-            <span class="secondary-text">listed by</span>
-            ${mode === 'desc' ? 'most' : 'least'} number of ${key}
+            <span class="secondary-text">listed in</span>
+            ${mode === 'desc' ? 'descending' : 'ascending'} number of ${key}
             ${key === 'tests' ? 'conducted' : ''}
           </div>
         </div>
