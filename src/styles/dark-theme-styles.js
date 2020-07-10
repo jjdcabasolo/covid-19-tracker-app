@@ -36,7 +36,7 @@ export default css`
     @media screen and (max-width: 600px) {
       input[name='countrySearch'] {
         background-color: var(--gray-900);
-        border: none;
+        border: 1px solid var(--gray-700);
       }
       .input-container {
         background-color: var(--gray-900);

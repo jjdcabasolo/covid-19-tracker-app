@@ -290,7 +290,7 @@ export default class UtilityPanel extends LitElement {
 
   renderDataSource() {
     return html`
-      <div class="small-text secondary-text">
+      <div class="small-text primary-text">
         The figures are taken from
       </div>
       <div class="small-text primary-text">
