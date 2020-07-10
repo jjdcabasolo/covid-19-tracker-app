@@ -33,6 +33,14 @@ export default css`
     .input-container {
       background-color: var(--dark-theme-html-bg);
     }
+    :host([sort='cases-desc']) .sticky,
+    :host([sort='cases-asc']) .sticky,
+    :host([sort='deaths-desc']) .sticky,
+    :host([sort='deaths-asc']) .sticky,
+    :host([sort='recoveries-desc']) .sticky,
+    :host([sort='recoveries-asc']) .sticky {
+      background-color: var(--gray-900);
+    }
     @media screen and (max-width: 600px) {
       input[name='countrySearch'] {
         background-color: var(--gray-900);
