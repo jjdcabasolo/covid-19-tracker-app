@@ -75,23 +75,9 @@ export default class CountryCard extends LitElement {
   }
 
   render() {
-    const {
-      cases: c,
-      country,
-      deaths: d,
-      population,
-      position: rank,
-      tests: t,
-      time,
-    } = this.country;
+    const { cases: c, country, deaths: d, position: rank, time } = this.country;
     const { total: cases, new: newCases, recovered } = c;
     const { total: deaths, new: newDeaths } = d;
-    const { total: tests } = t;
-
-    const testPercentage =
-      tests / population > 0 && population > 0
-        ? ((tests / population) * 100).toFixed(2)
-        : 0;
 
     return html`
       <div class="card">
@@ -122,13 +108,6 @@ export default class CountryCard extends LitElement {
             'recoveries',
             this.sort.includes('recoveries'),
             recovered.toLocaleString(),
-            NaN
-          )}
-          ${this.renderStatistic(
-            'of the population tested',
-            'tests',
-            this.sort.includes('tests'),
-            `${testPercentage || 0}%`,
             NaN
           )}
         </div>
