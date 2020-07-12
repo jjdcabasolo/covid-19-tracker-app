@@ -15,12 +15,14 @@ html {
   --light-theme-disabled-color: var(---gray-500);
   --light-theme-background-color: var(--gray-50);
   --light-theme-divider-color: var(--gray-400);
+  --light-theme-icon-button-inactive-color: var(--gray-300);
 
   --dark-theme-primary-color: var(--gray-100);
   --dark-theme-secondary-color: var(--gray-400);
   --dark-theme-disabled-color: var(---gray-500);
   --dark-theme-background-color: var(--gray-800);
   --dark-theme-divider-color: var(--gray-600);
+  --dark-theme-icon-button-inactive-color: var(--gray-700);
   
   --dark-theme-html-bg: #121212;
   --dark-theme-card-bg: #1E1E1E;
