@@ -39,12 +39,6 @@ export default [
 
   html`
     <div class="small-text primary-text">
-      Country pinning 📌 will be implemented soon!
-    </div>
-  `,
-
-  html`
-    <div class="small-text primary-text">
       Noticed something wrong? Send it here at my
       <a href="mailto:abasolojohnjourish@gmail.com">email</a>.
     </div>
