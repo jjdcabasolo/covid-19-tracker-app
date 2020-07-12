@@ -1,6 +1,7 @@
 /* eslint-disable class-methods-use-this */
 import { LitElement, html, css } from 'lit-element';
 
+import './icon-button';
 import './case-count';
 import './country-date-item';
 
@@ -8,7 +9,7 @@ import darkThemeStyles from '../styles/dark-theme-styles';
 import flexboxStyles from '../styles/flexbox-styles';
 import fontStyles from '../styles/font-styles';
 
-import formatCountryName from '../utils/formatCountryName';
+import { formatCountryName } from '../utils/country';
 
 export default class CountryCard extends LitElement {
   static get styles() {
@@ -27,9 +28,6 @@ export default class CountryCard extends LitElement {
           position: relative;
           width: 240px;
           border: 1px solid var(--gray-300);
-        }
-        .card:hover {
-          box-shadow: var(--card-shadow);
         }
         @media screen and (max-width: 1039px) {
           .card {
@@ -53,6 +51,11 @@ export default class CountryCard extends LitElement {
         .statistic:last-child {
           margin-bottom: 0;
         }
+        .country-pin {
+          position: absolute;
+          right: 16px;
+          bottom: 16px;
+        }
       `,
       darkThemeStyles,
     ];
@@ -62,6 +65,7 @@ export default class CountryCard extends LitElement {
     return {
       country: { type: Object },
       filter: { type: String },
+      isPinned: { type: Boolean },
       sort: { type: String },
     };
   }
@@ -71,6 +75,7 @@ export default class CountryCard extends LitElement {
 
     this.country = {};
     this.filter = '';
+    this.isPinned = false;
     this.sort = '';
   }
 
@@ -111,6 +116,14 @@ export default class CountryCard extends LitElement {
             NaN
           )}
         </div>
+
+        <div class="country-pin">
+          <icon-button
+            ?inactive=${!this.isPinned}
+            @handle-icon-click=${this.handleIconClick}
+            icon="push_pin"
+          ></icon-button>
+        </div>
       </div>
     `;
   }
@@ -140,6 +153,16 @@ export default class CountryCard extends LitElement {
         </div>
       </div>
     `;
+  }
+
+  handleIconClick() {
+    this.dispatchEvent(
+      new CustomEvent('set-pin', {
+        detail: {
+          code: this.country.code,
+        },
+      })
+    );
   }
 }
 
