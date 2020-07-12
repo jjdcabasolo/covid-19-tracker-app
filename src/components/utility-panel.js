@@ -2,10 +2,10 @@
 import { LitElement, html, css } from 'lit-element';
 import { nothing } from 'lit-html';
 
-import '@material/mwc-icon';
-import './country-search-form';
-import './chip-button/sort-chip-button';
 import './chip-button/radio-chip-button';
+import './chip-button/sort-chip-button';
+import './country-search-form';
+import './icon-button';
 import './skeleton-loaders/utility-panel-count-skeleton';
 
 import darkThemeStyles from '../styles/dark-theme-styles';
@@ -74,12 +74,6 @@ export default class UtilityPanel extends LitElement {
           transition: height 2s;
           width: 100%;
           z-index: 2;
-        }
-        .expand-icon-container {
-          border-radius: 4px;
-          border: 1px solid var(--gray-400);
-          cursor: pointer;
-          width: 40px;
         }
         @media screen and (max-width: 600px) {
           .util-container {
@@ -159,10 +153,11 @@ export default class UtilityPanel extends LitElement {
             <div class="item search-form">
               ${this.renderSearchForm()}
             </div>
-            <div class="item vcenter hcenter expand-icon-container">
-              <mwc-icon @click="${this.handleIconClick}" class="primary-text">
-                ${this.renderToggleIcon()}
-              </mwc-icon>
+            <div class="item vcenter hcenter">
+              <icon-button
+                @handle-icon-click=${this.handleIconClick}
+                icon=${this.renderToggleIcon()}
+              ></icon-button>
             </div>
           </div>
           ${this.renderCountDetails()}
@@ -307,11 +302,13 @@ export default class UtilityPanel extends LitElement {
   renderDataSource() {
     return html`
       <div class="small-text primary-text">
-        The figures are taken from
+        <span class="secondary-text">The figures are taken from</span>
         <a href=${apiSportsLink}>api-sports</a>'
         <a href=${covidAPILink}>COVID-19 API</a>
         at <a href=${rapidAPILink}>RapidAPI</a>. Data may not be 100% accurate.
-        It's a free API, so please bear with the API provider 😅
+        <span class="secondary-text"
+          >It's a free API, so please bear with the API provider 😅</span
+        >
       </div>
     `;
   }
@@ -327,6 +324,10 @@ export default class UtilityPanel extends LitElement {
   }
 
   handleSearchQuery({ detail }) {
+    if (this.isMobile) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
     this.dispatchEvent(new CustomEvent('handle-search-query', { detail }));
   }
 
