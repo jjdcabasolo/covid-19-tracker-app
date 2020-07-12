@@ -1,6 +1,6 @@
 import CountryList from './country-list';
 
-import formatCountryName from '../utils/formatCountryName';
+import { formatCountryName, getCountryCode } from '../utils/country';
 
 import continents from '../constants/continents';
 
@@ -80,7 +80,10 @@ export default class CountryListConnected extends CountryList {
           continent: 'Worldwide',
         });
       } else {
-        const newItem = { ...item };
+        const newItem = {
+          ...item,
+          code: getCountryCode(formattedCountryName),
+        };
 
         // to correct the south korea name. it only displays 's korea'
         if (formattedCountryName.includes('korea')) {
@@ -110,54 +113,57 @@ export default class CountryListConnected extends CountryList {
         },
       }),
     );
+
+    this.getUserPreference();
   }
 
   // upcoming feature: country pinning
-  // async getUserPreference() {
-  //   const userPref = localStorage.getItem('preference');
+  async getUserPreference() {
+    const userPref = localStorage.getItem('preference');
 
-  //   if (userPref) {
-  //     this.preference = [...this.preference, ...userPref.split(',')];
-  //     return;
-  //   }
+    if (userPref) {
+      this.preference = [...this.preference, ...userPref.split(',')];
+      return;
+    }
 
-  //   try {
-  //     const response = await fetch('https://freegeoip.app/json/', {
-  //       method: 'GET',
-  //       headers: {
-  //         accept: 'application/json',
-  //         'content-type': 'application/json',
-  //       },
-  //     });
+    try {
+      const response = await fetch('https://freegeoip.app/json/', {
+        method: 'GET',
+        headers: {
+          accept: 'application/json',
+          'content-type': 'application/json',
+        },
+      });
 
-  //     if (response.status !== 200) throw response;
+      if (response.status !== 200) throw response;
 
-  //     const toJSON = await response.json();
-  //     const country = toJSON.country_name.toLowerCase();
+      const toJSON = await response.json();
+      const country = toJSON.country_name.toLowerCase();
+      const code = getCountryCode(country);
 
-  //     localStorage.setItem('preference', country);
-  //     this.preference = [...this.preference, country];
-  //   } catch (e) {
-  //     // this.dispatchEvent(
-  //     //   new CustomEvent('handle-error', {
-  //     //     detail: {
-  //     //       error: `
-  //     //         Failed to load 😞
-  //     //         ${e.status}: ${e.statusText}
-  //     //       `,
-  //     //     },
-  //     //   }),
-  //     // );
-  //   } finally {
-  //     // this.dispatchEvent(
-  //     //   new CustomEvent('update-is-fetching', {
-  //     //     detail: {
-  //     //       isLoading: false,
-  //     //     },
-  //     //   }),
-  //     // );
-  //   }
-  // }
+      localStorage.setItem('preference', code);
+      this.preference = [...this.preference, code];
+    } catch (e) {
+      // this.dispatchEvent(
+      //   new CustomEvent('handle-error', {
+      //     detail: {
+      //       error: `
+      //         Failed to load 😞
+      //         ${e.status}: ${e.statusText}
+      //       `,
+      //     },
+      //   }),
+      // );
+    } finally {
+      // this.dispatchEvent(
+      //   new CustomEvent('update-is-fetching', {
+      //     detail: {
+      //       isLoading: false,
+      //     },
+      //   }),
+      // );
+    }
+  }
 }
 
 customElements.define('country-list-connected', CountryListConnected);

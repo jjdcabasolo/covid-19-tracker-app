@@ -5,11 +5,10 @@ import darkThemeStyles from '../styles/dark-theme-styles';
 import flexboxStyles from '../styles/flexbox-styles';
 import fontStyles from '../styles/font-styles';
 
-import formatCountryName from '../utils/formatCountryName';
+import { formatCountryName, getCountryCode } from '../utils/country';
 import ordinalize from '../utils/ordinalize';
 
 import months from '../constants/months';
-import countries from '../constants/countries';
 
 export default class CountryDateItem extends LitElement {
   static get styles() {
@@ -76,22 +75,22 @@ export default class CountryDateItem extends LitElement {
       </div>
       <div
         class="date small-text secondary-text item ${this.isCentered
-          ? 'hcenter'
-          : ''}"
+    ? 'hcenter'
+    : ''}"
       >
         ${this.rank > -1
-          ? html`
+    ? html`
               <span class="primary-text"
                 >${ordinalize(this.rank + 1)}&nbsp;</span
               >
             `
-          : nothing}
+    : nothing}
         as of ${month} ${day}, ${year}
       </div>
       <div
         class="date small-text secondary-text item ${this.isCentered
-          ? 'hcenter'
-          : ''}"
+    ? 'hcenter'
+    : ''}"
       >
         ${time}
       </div>
@@ -105,10 +104,7 @@ export default class CountryDateItem extends LitElement {
         formattedCountryName = 'united kingdom';
       }
 
-      const res = countries.find(e =>
-        formatCountryName(e.name).includes(formattedCountryName)
-      );
-      const { code } = res;
+      const code = getCountryCode(formattedCountryName);
 
       return html`
         <img

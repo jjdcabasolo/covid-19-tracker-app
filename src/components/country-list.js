@@ -6,7 +6,7 @@ import './country-card';
 import './skeleton-loaders/country-card-skeleton';
 import './scroll-to-top-button';
 
-import formatCountryName from '../utils/formatCountryName';
+import { formatCountryName } from '../utils/country';
 
 import fontStyles from '../styles/font-styles';
 
@@ -71,8 +71,8 @@ export default class CountryList extends LitElement {
     const loadMoreSentinel = this.shadowRoot.getElementById('loadMoreSentinel');
 
     if (loadMoreSentinel) {
-      const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
           if (entry.intersectionRatio > 0) {
             setTimeout(() => {
               this.loadedItems += 20;
@@ -85,12 +85,12 @@ export default class CountryList extends LitElement {
     }
 
     const scrollToTopSentinel = this.shadowRoot.getElementById(
-      'scrollToTopSentinel'
+      'scrollToTopSentinel',
     );
 
     if (scrollToTopSentinel) {
-      const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
           if (entry.intersectionRatio > 0) {
             this.hasScrollToTop = false;
           } else {
@@ -120,8 +120,7 @@ export default class CountryList extends LitElement {
 
     if (filteredItems.length > 0) {
       const extraItems = this.isMobile ? 0 : 3;
-      const itemAdjustment =
-        filteredItems.length > this.loadedItems ? extraItems : 0;
+      const itemAdjustment = filteredItems.length > this.loadedItems ? extraItems : 0;
 
       return filteredItems
         .slice(0, this.loadedItems + itemAdjustment)
@@ -142,6 +141,8 @@ export default class CountryList extends LitElement {
             <div class="country-card-item">
               <country-card
                 .country=${e}
+                ?isPinned=${this.preference.includes(e.code)}
+                @set-pin=${this.setPin}
                 filter=${this.filter}
                 sort=${this.sort}
               ></country-card>
@@ -170,7 +171,7 @@ export default class CountryList extends LitElement {
   filterSearchQuery() {
     const filteredItems = this.countries
       // coverage filtering
-      .filter(e => {
+      .filter((e) => {
         if (this.filter === 'worldwide') return e;
 
         if (!e.continent) return null;
@@ -217,13 +218,41 @@ export default class CountryList extends LitElement {
         position: i,
       }))
       // search filtering
-      .filter(e => {
+      .filter((e) => {
         const trimmedCountry = formatCountryName(e.country);
         const trimmedQuery = formatCountryName(this.query);
 
         return trimmedCountry.indexOf(trimmedQuery) === 0;
       });
 
+    if (this.preference.length > 0) {
+      let pinnedCountries = [];
+      let updatedFilteredItems = [...filteredItems];
+      // country pinning - pin to top
+      updatedFilteredItems = updatedFilteredItems.reduce((acc, cur) => {
+        if (this.preference.includes(cur.code)) {
+          pinnedCountries = [...pinnedCountries, cur];
+          return acc;
+        }
+
+        return acc.concat(cur);
+      }, []);
+
+      return [...pinnedCountries, ...updatedFilteredItems];
+    }
+
     return filteredItems;
+  }
+
+  setPin({ detail }) {
+    const { code } = detail;
+
+    if (this.preference.includes(code)) {
+      this.preference = this.preference.filter((e) => e !== code);
+    } else {
+      this.preference = [...this.preference, code];
+    }
+    localStorage.setItem('preference', this.preference);
+    this.requestUpdate();
   }
 }
