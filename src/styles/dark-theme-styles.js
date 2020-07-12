@@ -89,5 +89,13 @@ export default css`
       background-color: var(--dark-theme-background-color);
       color: var(--gray-50);
     }
+
+    /* icon-button.js */
+    .icon {
+      color: var(--dark-theme-secondary-color);
+    }
+    :host([inactive]) .icon-container .icon {
+      color: var(--dark-theme-icon-button-inactive-color);
+    }
   }
 `;
