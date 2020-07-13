@@ -6,7 +6,7 @@ export default css`
     font-size: 0.8rem;
   }
   .medium-text {
-    font-size: 1.25rem;
+    font-size: 1.2rem;
   }
   .large-text {
     font-size: 1.5rem;
