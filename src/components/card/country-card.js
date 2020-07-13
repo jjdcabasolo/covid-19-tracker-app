@@ -1,19 +1,21 @@
 /* eslint-disable class-methods-use-this */
 import { LitElement, html, css } from 'lit-element';
 
-import './icon-button';
-import './case-count';
-import './country-date-item';
+import '../icon-button';
+import '../case-count';
+import '../country-date-item';
 
-import darkThemeStyles from '../styles/dark-theme-styles';
-import flexboxStyles from '../styles/flexbox-styles';
-import fontStyles from '../styles/font-styles';
+import cardStyles from './card.styles';
+import darkThemeStyles from '../../styles/dark-theme-styles';
+import flexboxStyles from '../../styles/flexbox-styles';
+import fontStyles from '../../styles/font-styles';
 
-import { formatCountryName } from '../utils/country';
+import { formatCountryName } from '../../utils/country';
 
 export default class CountryCard extends LitElement {
   static get styles() {
     return [
+      cardStyles,
       flexboxStyles,
       fontStyles,
       css`
@@ -21,22 +23,11 @@ export default class CountryCard extends LitElement {
           width: inherit;
         }
         .card {
-          border-radius: 4px;
-          box-sizing: border-box;
-          display: inline-block;
-          padding: 16px;
-          position: relative;
           width: 240px;
-          border: 1px solid var(--gray-300);
         }
         @media screen and (max-width: 1039px) {
           .card {
             width: inherit;
-          }
-        }
-        @media screen and (max-width: 600px) {
-          .card {
-            padding: 16px 24px;
           }
         }
         .statistic-container {
