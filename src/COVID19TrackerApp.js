@@ -5,7 +5,7 @@ import './components/app-description';
 import './components/country-list-connected';
 import './components/skeleton-loaders/worldwide-card-skeleton';
 import './components/utility-panel';
-import './components/worldwide-card';
+import './components/card/worldwide-card';
 
 import darkThemeStyles from './styles/dark-theme-styles';
 import flexboxStyles from './styles/flexbox-styles';
