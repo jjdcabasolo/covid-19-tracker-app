@@ -4,12 +4,7 @@ import { formatCountryName, getCountryCode } from '../utils/country';
 
 import continents from '../constants/continents';
 
-import {
-  apiHost,
-  apiKey,
-  apiUrl,
-  apiPassphrase,
-} from '../constants/api';
+import { apiHost, apiKey, apiUrl, apiPassphrase } from '../constants/api';
 
 export default class CountryListConnected extends CountryList {
   async fetchCountries() {
@@ -17,7 +12,10 @@ export default class CountryListConnected extends CountryList {
     const key = apiKey || process.env.API_KEY;
     const url = apiUrl || process.env.API_URL;
 
-    const simpleCrypto = new SimpleCrypto(apiPassphrase || process.env.API_PASSPHRASE);
+    // eslint-disable-next-line no-undef
+    const simpleCrypto = new SimpleCrypto(
+      apiPassphrase || process.env.API_PASSPHRASE
+    );
     const decryptedKey = simpleCrypto.decrypt(key);
 
     try {
@@ -30,9 +28,25 @@ export default class CountryListConnected extends CountryList {
       });
       if (response.status !== 200) throw response;
       const toJSON = await response.json();
-      this.countries = toJSON.response;
-      this.extractData();
+      localStorage.setItem('cachedData', JSON.stringify(toJSON.response));
+      this.extractData(toJSON.response);
     } catch (e) {
+      this.handleFetchingError(e);
+    } finally {
+      this.dispatchEvent(
+        new CustomEvent('update-is-fetching', {
+          detail: {
+            isLoading: false,
+          },
+        })
+      );
+
+      this.getUserPreference();
+    }
+  }
+
+  handleFetchingError(e) {
+    if (window.navigator.onLine) {
       this.dispatchEvent(
         new CustomEvent('handle-error', {
           detail: {
@@ -41,30 +55,37 @@ export default class CountryListConnected extends CountryList {
               ${e.status}: ${e.statusText}
             `,
           },
-        }),
+        })
       );
-    } finally {
-      this.dispatchEvent(
-        new CustomEvent('update-is-fetching', {
-          detail: {
-            isLoading: false,
-          },
-        }),
-      );
+    } else {
+      const cachedData = localStorage.getItem('cachedData');
 
-      // this.getUserPreference();
+      if (cachedData) {
+        this.extractData(JSON.parse(cachedData));
+      } else {
+        this.dispatchEvent(
+          new CustomEvent('handle-error', {
+            detail: {
+              error:
+                'No offline data saved. You must go online so the app can save the data for offline use.',
+            },
+          })
+        );
+      }
     }
   }
 
-  extractData() {
-    const data = [...this.countries];
+  extractData(response) {
+    const data = [...response];
     const extractedCountries = [];
     const extractedContinents = new Map();
     const countryCount = new Map();
 
-    data.forEach((item) => {
+    data.forEach(item => {
       const formattedCountryName = formatCountryName(item.country);
-      const formattedContinent = formatCountryName((item.continent) || 'no continent');
+      const formattedContinent = formatCountryName(
+        item.continent || 'no continent'
+      );
       const displayName = formatCountryName(item.country, false);
 
       if (continents.includes(formattedCountryName)) {
@@ -90,13 +111,17 @@ export default class CountryListConnected extends CountryList {
           newItem.country = 'South Korea';
         }
 
-        countryCount.set(formattedContinent, (countryCount.get(formattedContinent) || 0) + 1);
+        countryCount.set(
+          formattedContinent,
+          (countryCount.get(formattedContinent) || 0) + 1
+        );
         extractedCountries.push(newItem);
       }
     });
 
     extractedContinents.forEach((value, key) => {
-      const count = key === 'worldwide' ? extractedCountries.length : countryCount.get(key);
+      const count =
+        key === 'worldwide' ? extractedCountries.length : countryCount.get(key);
 
       extractedContinents.set(key, {
         ...value,
@@ -111,13 +136,10 @@ export default class CountryListConnected extends CountryList {
         detail: {
           coverage: extractedContinents,
         },
-      }),
+      })
     );
-
-    this.getUserPreference();
   }
 
-  // upcoming feature: country pinning
   async getUserPreference() {
     const userPref = localStorage.getItem('preference');
 
@@ -144,24 +166,8 @@ export default class CountryListConnected extends CountryList {
       localStorage.setItem('preference', code);
       this.preference = [...this.preference, code];
     } catch (e) {
-      // this.dispatchEvent(
-      //   new CustomEvent('handle-error', {
-      //     detail: {
-      //       error: `
-      //         Failed to load 😞
-      //         ${e.status}: ${e.statusText}
-      //       `,
-      //     },
-      //   }),
-      // );
-    } finally {
-      // this.dispatchEvent(
-      //   new CustomEvent('update-is-fetching', {
-      //     detail: {
-      //       isLoading: false,
-      //     },
-      //   }),
-      // );
+      // eslint-disable-next-line no-console
+      console.log(e);
     }
   }
 }

@@ -75,22 +75,22 @@ export default class CountryDateItem extends LitElement {
       </div>
       <div
         class="date small-text secondary-text item ${this.isCentered
-    ? 'hcenter'
-    : ''}"
+          ? 'hcenter'
+          : ''}"
       >
         ${this.rank > -1
-    ? html`
+          ? html`
               <span class="primary-text"
                 >${ordinalize(this.rank + 1)}&nbsp;</span
               >
             `
-    : nothing}
+          : nothing}
         as of ${month} ${day}, ${year}
       </div>
       <div
         class="date small-text secondary-text item ${this.isCentered
-    ? 'hcenter'
-    : ''}"
+          ? 'hcenter'
+          : ''}"
       >
         ${time}
       </div>
@@ -106,13 +106,17 @@ export default class CountryDateItem extends LitElement {
 
       const code = getCountryCode(formattedCountryName);
 
-      return html`
-        <img
-          alt="The National Flag of ${this.country}."
-          class="country-flag"
-          src="https://www.countryflags.io/${code}/shiny/48.png"
-        />
-      `;
+      if (window.navigator.onLine) {
+        return html`
+          <img
+            alt="The National Flag of ${this.country}."
+            class="country-flag"
+            src="https://www.countryflags.io/${code}/shiny/48.png"
+          />
+        `;
+      }
+
+      return nothing;
     }
 
     return nothing;
