@@ -6,25 +6,25 @@
 
 ## DEMO: [Click here to view the demo!](https://jjdcabasolo.github.io/covid-19-tracker-app)
 
-# Case count category
+## Case count category
 The case count is categorized into three:
 1. **Confirmed cases**: includes all types of reported cases, as well as recoveries.
 2. **Deaths**: a separate count for all deaths caused by COVID-19
 3. **Recoveries**: a subset of the confirmed cases count, presents the number of discharges/patient recoveries
 
-# Tech stack
+## Tech stack
 It is built using web components with the help from [LitElement](https://lit-element.polymer-project.org/). The project was scaffolded using [open-wc](https://open-wc.org/)'s CLI.
 
 For the data source, it uses the free [COVID-19 API](https://api-sports.io/documentation/covid-19) by [api-sports](https://rapidapi.com/user/api-sports) from [RapidAPI](https://rapidapi.com/).
 
-# Main features
+## Main features
 - **Country search**: user can search a country via its *name*.
 - **Coverage filtering**: user can filter the coverage of the list, either **worldwide** or by **continent**. Total count per coverage is also displayed.
 - **Case count sorting**: user can sort the list via [case count category](#case-count-category) in **ascending** or **descending** (*default*) order.
 - **Country pinning**: users can pin a country that would **stay on top of the list**. It is saved via `localStorage`.
   - **User location**: gets the user's country for default country pinned.
 
-# Other features
+## Other features
 - **Dark mode**: the app's theme adapts to the device/browser's current theme.
 - **PWA**: this is a progressive web app, it can be installed on supported devices and can work offline.
 > For offline, the data for the last online session would be used.
