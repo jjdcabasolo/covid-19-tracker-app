@@ -83,7 +83,7 @@ export default class COVID19TrackerApp extends LitElement {
           }
           .mobile-spacer {
             width: 100%;
-            height: 50vh;
+            height: 40vh;
           }
           utility-panel {
             align-items: unset;
@@ -145,7 +145,7 @@ export default class COVID19TrackerApp extends LitElement {
     if (this.error !== '') {
       return html`
         <main>
-          ${APP_TITLE}
+          ${this.renderAppTitle()}
           <p class="primary-text">${this.error}</p>
         </main>
       `;
@@ -193,13 +193,8 @@ export default class COVID19TrackerApp extends LitElement {
     }
 
     return html`
-      <div class="content container">
-        <div class="item vcenter logo">
-          ${trackerLogoSVG}
-        </div>
-        <div class="item">
-          ${APP_TITLE}
-        </div>
+      <div class="content">
+        ${this.renderAppTitle()}
       </div>
 
       <div class="content">
@@ -217,6 +212,20 @@ export default class COVID19TrackerApp extends LitElement {
           query=${this.query}
           sort=${this.config.sort}
         ></country-list-connected>
+      </div>
+    `;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  renderAppTitle() {
+    return html`
+      <div class="container nowrap">
+        <div class="item vcenter logo">
+          ${trackerLogoSVG}
+        </div>
+        <div class="item vcenter">
+          ${APP_TITLE}
+        </div>
       </div>
     `;
   }

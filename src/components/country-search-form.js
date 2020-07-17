@@ -39,7 +39,7 @@ export default class CountrySearchForm extends LitElement {
             position: static;
           }
           input[name='countrySearch'] {
-            padding: 8px 8px 8px 32px;
+            padding: 8px 8px 8px 36px;
             margin: 16px 0;
           }
           .search-icon {

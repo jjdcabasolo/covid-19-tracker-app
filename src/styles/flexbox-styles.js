@@ -20,4 +20,7 @@ export default css`
   .equal-space {
     justify-content: space-between;
   }
+  .nowrap {
+    flex-wrap: nowrap;
+  }
 `;
