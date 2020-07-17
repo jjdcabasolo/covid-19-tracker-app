@@ -59,7 +59,7 @@ export default class COVID19TrackerApp extends LitElement {
           height: 100vh;
           overflow-y: auto;
         }
-        @media screen and (max-height: 800px) and (orientation: landscape) {
+        @media screen and (max-height: 700px) and (orientation: landscape) {
           utility-panel {
             align-items: unset;
             display: unset;
