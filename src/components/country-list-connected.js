@@ -46,32 +46,29 @@ export default class CountryListConnected extends CountryList {
   }
 
   handleFetchingError(e) {
-    if (window.navigator.onLine) {
+    const cachedData = localStorage.getItem('cachedData');
+
+    if (cachedData) {
+      this.extractData(JSON.parse(cachedData));
+    } else if (window.navigator.onLine) {
       this.dispatchEvent(
         new CustomEvent('handle-error', {
           detail: {
             error: `
-              Failed to load 😞
-              ${e.status}: ${e.statusText}
-            `,
+                Failed to fetch data from API provider 😞 Status ${e.status}: ${e.statusText}.
+              `,
           },
         })
       );
     } else {
-      const cachedData = localStorage.getItem('cachedData');
-
-      if (cachedData) {
-        this.extractData(JSON.parse(cachedData));
-      } else {
-        this.dispatchEvent(
-          new CustomEvent('handle-error', {
-            detail: {
-              error:
-                'No offline data saved. You must go online so the app can save the data for offline use.',
-            },
-          })
-        );
-      }
+      this.dispatchEvent(
+        new CustomEvent('handle-error', {
+          detail: {
+            error:
+              'No offline data saved. You must go online so the app can save the data for offline use.',
+          },
+        })
+      );
     }
   }
 

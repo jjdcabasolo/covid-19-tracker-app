@@ -2,10 +2,11 @@ import { LitElement, html, css } from 'lit-element';
 import { nothing } from 'lit-html';
 
 import './components/app-description';
+import './components/card/worldwide-card';
 import './components/country-list-connected';
 import './components/skeleton-loaders/worldwide-card-skeleton';
+import './components/tablet-drawer';
 import './components/utility-panel';
-import './components/card/worldwide-card';
 
 import darkThemeStyles from './styles/dark-theme-styles';
 import flexboxStyles from './styles/flexbox-styles';
@@ -50,7 +51,19 @@ export default class COVID19TrackerApp extends LitElement {
           height: 100vh;
           position: fixed;
           top: 0;
-          width: 260px;
+          width: 250px;
+        }
+        utility-panel {
+          align-items: center;
+          display: flex;
+          height: 100vh;
+          overflow-y: auto;
+        }
+        @media screen and (max-height: 800px) and (orientation: landscape) {
+          utility-panel {
+            align-items: unset;
+            display: unset;
+          }
         }
         @media screen and (max-width: 600px) {
           .content {
@@ -62,6 +75,12 @@ export default class COVID19TrackerApp extends LitElement {
           .mobile-spacer {
             width: 100%;
             height: 50vh;
+          }
+          utility-panel {
+            align-items: unset;
+            display: unset;
+            height: unset;
+            overflow-y: unset;
           }
         }
       `,
@@ -123,13 +142,33 @@ export default class COVID19TrackerApp extends LitElement {
       `;
     }
 
+    if (this.isMobile) {
+      return html`
+        <main>
+          ${this.renderCountryList()}
+        </main>
+        <div class="mobile-spacer"></div>
+        ${this.renderUtilityBanner()}
+      `;
+    }
+
     if (this.isTablet) {
       return html`
         <main>
           ${this.renderCountryList()}
         </main>
-        ${this.isMobile ? html`<div class="mobile-spacer"></div>` : nothing}
-        ${this.renderUtilityBanner('bottom')}
+        <tablet-drawer>
+          <utility-panel
+            .worldwide=${this.coverage.get(this.config.filter)}
+            ?isLoading=${this.isLoading}
+            ?isMobile=${this.isMobile}
+            @handle-search-query=${this.handleSearchQuery}
+            @set-config=${this.setConfig}
+            filter=${this.config.filter}
+            slot="content"
+            sort=${this.config.sort}
+          ></utility-panel>
+        </tablet-drawer>
       `;
     }
 
@@ -170,8 +209,6 @@ export default class COVID19TrackerApp extends LitElement {
         <app-description></app-description>
       </div>
 
-      ${this.isTablet ? this.renderUtilityBanner('top') : null}
-
       <div class="content">
         ${worldwide}
         <country-list-connected
@@ -205,10 +242,7 @@ export default class COVID19TrackerApp extends LitElement {
     `;
   }
 
-  renderUtilityBanner(location) {
-    if (location === 'top' && this.isMobile) return null;
-    if (location === 'bottom' && !this.isMobile) return null;
-
+  renderUtilityBanner() {
     return html`
       <utility-panel
         .worldwide=${this.coverage.get(this.config.filter)}
@@ -227,6 +261,7 @@ export default class COVID19TrackerApp extends LitElement {
     // eslint-disable-next-line no-param-reassign
     context.isMobile = window.innerWidth < MOBILE;
     context.isTablet = window.innerWidth < TABLET;
+    document.body.style.overflow = '';
   }
 
   handleSearchQuery({ detail }) {

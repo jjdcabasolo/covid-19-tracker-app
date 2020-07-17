@@ -31,7 +31,7 @@ export default css`
       background-color: var(--dark-theme-card-bg);
     }
     .input-container {
-      background-color: var(--dark-theme-html-bg);
+      background-color: transparent;
     }
     :host([sort='cases-desc']) .sticky,
     :host([sort='cases-asc']) .sticky,
@@ -40,6 +40,14 @@ export default css`
     :host([sort='recoveries-desc']) .sticky,
     :host([sort='recoveries-asc']) .sticky {
       background-color: var(--gray-900);
+    }
+    :host([sort='cases-desc']) .sticky .icon-container,
+    :host([sort='cases-asc']) .sticky .icon-container,
+    :host([sort='deaths-desc']) .sticky .icon-container,
+    :host([sort='deaths-asc']) .sticky .icon-container,
+    :host([sort='recoveries-desc']) .sticky .icon-container,
+    :host([sort='recoveries-asc']) .sticky .icon-container {
+      background-color: var(--dark-theme-card-bg);
     }
     @media screen and (max-width: 600px) {
       input[name='countrySearch'] {
@@ -86,7 +94,7 @@ export default css`
 
     /* scroll-to-top-button.js */
     .button {
-      background-color: var(--dark-theme-background-color);
+      background-color: var(--gray-800);
       color: var(--gray-50);
     }
 
@@ -96,6 +104,16 @@ export default css`
     }
     :host([inactive]) .icon-container .icon {
       color: var(--dark-theme-icon-button-inactive-color);
+    }
+
+    /* tablet-drawer.js */
+    .drawer,
+    .drawer-toggle {
+      background-color: var(--gray-900);
+      border: 1px solid var(--gray-900);
+    }
+    .backdrop {
+      background-color: var(--dark-theme-backdrop-color);
     }
   }
 `;

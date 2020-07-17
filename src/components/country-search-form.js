@@ -16,25 +16,23 @@ export default class CountrySearchForm extends LitElement {
           position: relative;
         }
         input[name='countrySearch'] {
-          background-color: transparent;
+          background-color: var(--light-theme-background-color);
           border-radius: 4px;
-          border: 1px solid var(--gray-400);
+          border: var(--light-theme-card-border);
           box-sizing: border-box;
           font-family: 'Roboto Mono', monospace;
           font-size: 14px;
+          margin: 8px 0;
           padding: 8px 16px 8px 36px;
           width: 100%;
         }
         .search-icon {
+          bottom: 13px;
           left: 8px;
           position: absolute;
-          top: 7px;
         }
         .disabled {
           pointer-events: none;
-        }
-        label {
-          display: none;
         }
         @media screen and (max-width: 600px) {
           .input-container {
@@ -42,11 +40,12 @@ export default class CountrySearchForm extends LitElement {
           }
           input[name='countrySearch'] {
             padding: 8px 8px 8px 32px;
+            margin: 16px 0;
           }
           .search-icon {
             --mdc-icon-size: 16px;
-            left: 34px;
-            top: 34px;
+            bottom: 26px;
+            left: 12px;
           }
         }
       `,
@@ -74,9 +73,15 @@ export default class CountrySearchForm extends LitElement {
         <mwc-icon
           class="search-icon primary-text"
           @click="${this.handleIconClick}"
-          >search</mwc-icon
         >
-        <label for="countrySearch">Label</label>
+          search
+        </mwc-icon>
+        <label for="countrySearch" class="small-text">
+          <slot name="label">
+            <span class="primary-text">search</span>
+            <span class="secondary-text">by country</span>
+          </slot>
+        </label>
         <input
           @input="${debounceEvent(() => this.handleSearchQuery(this), 500)}"
           aria-labelledby="countrySearch"

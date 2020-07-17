@@ -5,8 +5,8 @@ import { nothing } from 'lit-html';
 import './chip-button/radio-chip-button';
 import './chip-button/sort-chip-button';
 import './country-search-form';
-import './icon-button';
 import './skeleton-loaders/utility-panel-count-skeleton';
+import '@material/mwc-icon';
 
 import darkThemeStyles from '../styles/dark-theme-styles';
 import fontStyles from '../styles/font-styles';
@@ -49,24 +49,23 @@ export default class UtilityPanel extends LitElement {
           margin-bottom: 4px;
         }
         .icon {
-          --mdc-icon-size: 16px;
-          margin-right: 2px;
+          --mdc-icon-size: 24px;
         }
         .footer .secondary-text {
           font-weight: 200;
         }
         .search-form {
           flex-grow: 1;
-          margin-right: 8px;
+          position: relative;
         }
         country-search-form {
           flex-grow: 1;
         }
         .sticky {
           background-color: var(--light-theme-background-color);
-          border-bottom: 1px var(--gray-300) solid;
+          border-bottom: var(--light-theme-card-border);
           height: auto;
-          margin-left: -8px;
+          margin-left: -24px;
           padding: 24px 8px 16px 8px;
           position: -webkit-sticky;
           position: sticky;
@@ -74,6 +73,19 @@ export default class UtilityPanel extends LitElement {
           transition: height 2s;
           width: 100%;
           z-index: 2;
+        }
+        .backdrop {
+          background-color: var(--light-theme-backdrop-color);
+          height: 100%;
+          opacity: 0.7;
+          position: fixed;
+          top: 0;
+          width: 100%;
+        }
+        @media screen and (max-width: 1000px) {
+          .util-item {
+            margin: 16px 0;
+          }
         }
         @media screen and (max-width: 600px) {
           .util-container {
@@ -84,10 +96,11 @@ export default class UtilityPanel extends LitElement {
           }
           .sticky {
             border-top: none;
+            border-bottom: none;
             border-radius: 16px 16px 0 0;
             bottom: 0;
             margin-left: 0;
-            padding: 24px;
+            padding: 40px 24px 16px 24px;
             top: unset;
             width: unset;
           }
@@ -103,17 +116,34 @@ export default class UtilityPanel extends LitElement {
           :host([sort='recoveries-asc']) .sticky {
             background-color: var(--light-green-50);
           }
+          .icon-container {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            left: 0;
+            border-radius: 16px 16px 0 0;
+            cursor: pointer;
+          }
+          :host([sort='cases-desc']) .sticky .icon-container,
+          :host([sort='cases-asc']) .sticky .icon-container {
+            background-color: var(--amber-100);
+          }
+          :host([sort='deaths-desc']) .sticky .icon-container,
+          :host([sort='deaths-asc']) .sticky .icon-container {
+            background-color: var(--deep-orange-100);
+          }
+          :host([sort='recoveries-desc']) .sticky .icon-container,
+          :host([sort='recoveries-asc']) .sticky .icon-container {
+            background-color: var(--light-green-100);
+          }
           .coverage {
             margin: 0;
           }
           .util-item:last-child {
             margin-bottom: 0;
           }
-          .search {
-            margin-bottom: 16px;
-          }
           .util-skeleton {
-            margin-top: 16px;
+            margin-bottom: 8px;
           }
         }
       `,
@@ -124,9 +154,9 @@ export default class UtilityPanel extends LitElement {
   static get properties() {
     return {
       filter: { type: String },
-      isExpanded: { type: Boolean },
       isLoading: { type: Boolean },
       isMobile: { type: Boolean },
+      open: { type: Boolean },
       revertIcons: { type: Boolean },
       sort: { type: String },
       worldwide: { type: Object },
@@ -137,9 +167,9 @@ export default class UtilityPanel extends LitElement {
     super();
 
     this.filter = '';
-    this.isExpanded = true;
     this.isLoading = false;
     this.isMobile = false;
+    this.open = false;
     this.revertIcons = false;
     this.sort = '';
     this.worldwide = {};
@@ -148,20 +178,22 @@ export default class UtilityPanel extends LitElement {
   render() {
     if (this.isMobile) {
       return html`
+        ${this.open ? this.renderBackdrop() : nothing}
         <div class="sticky">
           <div class="container search">
+            <div
+              class="item hcenter icon-container"
+              @click="${this.handleIconClick}"
+            >
+              <mwc-icon class="icon">
+                ${this.renderToggleIcon()}
+              </mwc-icon>
+            </div>
             <div class="item search-form">
               ${this.renderSearchForm()}
             </div>
-            <div class="item vcenter hcenter">
-              <icon-button
-                @handle-icon-click=${this.handleIconClick}
-                icon=${this.renderToggleIcon()}
-              ></icon-button>
-            </div>
           </div>
-          ${this.renderCountDetails()}
-          ${this.isExpanded ? nothing : this.renderUtility()}
+          ${this.open ? this.renderUtility() : nothing}
         </div>
       `;
     }
@@ -180,7 +212,6 @@ export default class UtilityPanel extends LitElement {
           ? nothing
           : html`
               <div class="item util-item vertical">
-                ${this.renderHeader('search', 'by country')}
                 <div>${this.renderSearchForm()}</div>
               </div>
               ${this.renderCountDetails()}
@@ -204,10 +235,24 @@ export default class UtilityPanel extends LitElement {
           ${this.renderDataSource()}
         </div>
 
+        <div class="item util-item vertical">
+          ${this.renderDisclaimer()}
+        </div>
+
         <div class="item util-item vertical footer">
           ${this.renderFooter()}
         </div>
       </div>
+    `;
+  }
+
+  renderBackdrop() {
+    return html`
+      <div
+        class="backdrop"
+        @click=${this.handleIconClick}
+        @touchstart=${this.handleIconClick}
+      ></div>
     `;
   }
 
@@ -227,15 +272,23 @@ export default class UtilityPanel extends LitElement {
         ?readonly=${this.isLoading}
         ?hasPlaceholder=${this.isMobile}
         @handle-search-query=${this.handleSearchQuery}
-      ></country-search-form>
+      >
+        ${this.isMobile
+          ? html`
+              <div slot="label">
+                ${this.renderCountDetails()}
+              </div>
+            `
+          : nothing}
+      </country-search-form>
     `;
   }
 
   renderToggleIcon() {
     if (this.revertIcons) {
-      return this.isExpanded ? 'expand_less' : 'expand_more';
+      return this.open ? 'expand_more' : 'expand_less';
     }
-    return this.isExpanded ? 'expand_more' : 'expand_less';
+    return this.open ? 'expand_less' : 'expand_more';
   }
 
   renderCountDetails() {
@@ -302,10 +355,18 @@ export default class UtilityPanel extends LitElement {
   renderDataSource() {
     return html`
       <div class="small-text primary-text">
-        <span class="secondary-text">The figures are taken from</span>
+        The figures are taken from
         <a href=${apiSportsLink}>api-sports</a>'
         <a href=${covidAPILink}>COVID-19 API</a>
-        at <a href=${rapidAPILink}>RapidAPI</a>. Data may not be 100% accurate.
+        at <a href=${rapidAPILink}>RapidAPI</a>.
+      </div>
+    `;
+  }
+
+  renderDisclaimer() {
+    return html`
+      <div class="small-text primary-text">
+        Data may not be 100% accurate.
         <span class="secondary-text"
           >It's a free API, so please bear with the API provider 😅</span
         >
@@ -336,7 +397,8 @@ export default class UtilityPanel extends LitElement {
   }
 
   handleIconClick() {
-    this.isExpanded = !this.isExpanded;
+    document.body.style.overflow = this.open ? '' : 'hidden';
+    this.open = !this.open;
   }
 }
 
