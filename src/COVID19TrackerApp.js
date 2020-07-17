@@ -12,6 +12,8 @@ import darkThemeStyles from './styles/dark-theme-styles';
 import flexboxStyles from './styles/flexbox-styles';
 import fontStyles from './styles/font-styles';
 
+import trackerLogoSVG from './tracker-logo';
+
 const APP_TITLE = html`<h1 class="primary-text">COVID-19 Tracker</h1>`;
 const MOBILE = 600;
 const TABLET = 1000;
@@ -58,6 +60,13 @@ export default class COVID19TrackerApp extends LitElement {
           display: flex;
           height: 100vh;
           overflow-y: auto;
+        }
+        .logo {
+          margin-right: 16px;
+        }
+        .logo svg {
+          height: 3em;
+          width: 3em;
         }
         @media screen and (max-height: 700px) and (orientation: landscape) {
           utility-panel {
@@ -148,7 +157,7 @@ export default class COVID19TrackerApp extends LitElement {
           ${this.renderCountryList()}
         </main>
         <div class="mobile-spacer"></div>
-        ${this.renderUtilityBanner()}
+        ${this.renderUtilityPanel()}
       `;
     }
 
@@ -158,16 +167,7 @@ export default class COVID19TrackerApp extends LitElement {
           ${this.renderCountryList()}
         </main>
         <tablet-drawer>
-          <utility-panel
-            .worldwide=${this.coverage.get(this.config.filter)}
-            ?isLoading=${this.isLoading}
-            ?isMobile=${this.isMobile}
-            @handle-search-query=${this.handleSearchQuery}
-            @set-config=${this.setConfig}
-            filter=${this.config.filter}
-            slot="content"
-            sort=${this.config.sort}
-          ></utility-panel>
+          ${this.renderUtilityPanel()}
         </tablet-drawer>
       `;
     }
@@ -179,15 +179,7 @@ export default class COVID19TrackerApp extends LitElement {
         </div>
         <div class="item right-panel">
           <div class="right-panel-container">
-            <utility-panel
-              .worldwide=${this.coverage.get(this.config.filter)}
-              ?isLoading=${this.isLoading}
-              ?isMobile=${this.isMobile}
-              @handle-search-query=${this.handleSearchQuery}
-              @set-config=${this.setConfig}
-              filter=${this.config.filter}
-              sort=${this.config.sort}
-            ></utility-panel>
+            ${this.renderUtilityPanel()}
           </div>
         </div>
       </main>
@@ -201,8 +193,13 @@ export default class COVID19TrackerApp extends LitElement {
     }
 
     return html`
-      <div class="content">
-        ${APP_TITLE}
+      <div class="content container">
+        <div class="item vcenter logo">
+          ${trackerLogoSVG}
+        </div>
+        <div class="item">
+          ${APP_TITLE}
+        </div>
       </div>
 
       <div class="content">
@@ -242,16 +239,17 @@ export default class COVID19TrackerApp extends LitElement {
     `;
   }
 
-  renderUtilityBanner() {
+  renderUtilityPanel() {
     return html`
       <utility-panel
         .worldwide=${this.coverage.get(this.config.filter)}
         ?isLoading=${this.isLoading}
-        ?isMobile=${this.isTablet}
+        ?isMobile=${this.isMobile}
         ?revertIcons=${this.isMobile}
         @handle-search-query=${this.handleSearchQuery}
         @set-config=${this.setConfig}
         filter=${this.config.filter}
+        slot="content"
         sort=${this.config.sort}
       ></utility-panel>
     `;
@@ -261,7 +259,6 @@ export default class COVID19TrackerApp extends LitElement {
     // eslint-disable-next-line no-param-reassign
     context.isMobile = window.innerWidth < MOBILE;
     context.isTablet = window.innerWidth < TABLET;
-    document.body.style.overflow = '';
   }
 
   handleSearchQuery({ detail }) {
