@@ -29,6 +29,10 @@ export default class CountryList extends LitElement {
           p {
             height: 20vh;
           }
+          .mobile-spacer {
+            width: 100%;
+            height: 40vh;
+          }
         }
       `,
       fontStyles,
@@ -104,20 +108,22 @@ export default class CountryList extends LitElement {
   }
 
   render() {
+    const filteredItems = this.filterSearchQuery();
     return html`
       <masonry-layout gap="14" maxcolwidth="${this.isMobile ? 390 : 310}">
-        ${this.renderCountryList()}
+        ${this.renderCountryList(filteredItems)}
       </masonry-layout>
       <div id="scrollToTopSentinel"></div>
       <scroll-to-top-button
         ?isVisible="${this.hasScrollToTop}"
       ></scroll-to-top-button>
+      ${filteredItems.length < 3
+        ? html`<div class="mobile-spacer"></div>`
+        : nothing}
     `;
   }
 
-  renderCountryList() {
-    const filteredItems = this.filterSearchQuery();
-
+  renderCountryList(filteredItems) {
     if (filteredItems.length > 0) {
       const extraItems = this.isMobile ? 0 : 3;
       const itemAdjustment =

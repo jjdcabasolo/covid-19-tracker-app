@@ -20,7 +20,7 @@ export default class IconButton extends LitElement {
         }
         @media screen and (max-width: 600px) {
           .icon {
-            --mdc-icon-size: 32px;
+            --mdc-icon-size: 28px;
           }
         }
         :host([inactive]) .icon-container .icon {

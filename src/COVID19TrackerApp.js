@@ -81,10 +81,6 @@ export default class COVID19TrackerApp extends LitElement {
           main {
             padding-bottom: 0;
           }
-          .mobile-spacer {
-            width: 100%;
-            height: 40vh;
-          }
           utility-panel {
             align-items: unset;
             display: unset;
@@ -156,7 +152,6 @@ export default class COVID19TrackerApp extends LitElement {
         <main>
           ${this.renderCountryList()}
         </main>
-        <div class="mobile-spacer"></div>
         ${this.renderUtilityPanel()}
       `;
     }

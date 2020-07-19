@@ -23,13 +23,20 @@ export default class CountrySearchForm extends LitElement {
           font-family: 'Roboto Mono', monospace;
           font-size: 14px;
           margin: 8px 0;
-          padding: 8px 16px 8px 36px;
-          width: 100%;
+          padding: 8px 36px;
+          width: 99%;
+        }
+        .clear-icon,
+        .search-icon {
+          position: absolute;
+          cursor: pointer;
+          bottom: 13px;
         }
         .search-icon {
-          bottom: 13px;
           left: 8px;
-          position: absolute;
+        }
+        .clear-icon {
+          right: 8px;
         }
         .disabled {
           pointer-events: none;
@@ -39,13 +46,19 @@ export default class CountrySearchForm extends LitElement {
             position: static;
           }
           input[name='countrySearch'] {
-            padding: 8px 8px 8px 36px;
+            padding: 8px 40px;
             margin: 16px 0;
           }
+          .clear-icon,
           .search-icon {
-            --mdc-icon-size: 16px;
-            bottom: 26px;
+            --mdc-icon-size: 20px;
+            bottom: 24px;
+          }
+          .search-icon {
             left: 12px;
+          }
+          .clear-icon {
+            right: 12px;
           }
         }
       `,
@@ -72,9 +85,12 @@ export default class CountrySearchForm extends LitElement {
       <div class="input-container ${this.readonly ? 'disabled' : ''}">
         <mwc-icon
           class="search-icon primary-text"
-          @click="${this.handleIconClick}"
+          @click="${this.handleSearchIconClick}"
         >
           search
+        </mwc-icon>
+        <mwc-icon class="clear-icon primary-text" @click="${this.handleClear}">
+          clear
         </mwc-icon>
         <label for="countrySearch" class="small-text">
           <slot name="label">
@@ -89,7 +105,7 @@ export default class CountrySearchForm extends LitElement {
           id="countrySearch"
           name="countrySearch"
           placeholder=${this.hasPlaceholder ? 'search country...' : ''}
-          type="search"
+          type="text"
         />
       </div>
     `;
@@ -105,10 +121,21 @@ export default class CountrySearchForm extends LitElement {
     );
   }
 
-  handleIconClick() {
+  handleSearchIconClick() {
     const input = this.shadowRoot.getElementById('countrySearch');
 
     input.focus();
+  }
+
+  handleClear() {
+    const input = this.shadowRoot.getElementById('countrySearch');
+
+    input.value = '';
+    this.dispatchEvent(
+      new CustomEvent('handle-search-query', {
+        detail: { query: '' },
+      })
+    );
   }
 }
 
