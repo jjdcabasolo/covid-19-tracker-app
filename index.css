@@ -11,32 +11,43 @@ html {
   --gray-900: #212121;
   
   --light-theme-primary-color: var(--gray-900);
-  --light-theme-secondary-color: var(--gray-600);
+  --light-theme-secondary-color: var(--gray-700);
   --light-theme-disabled-color: var(---gray-500);
   --light-theme-background-color: var(--gray-50);
+  --light-theme-backdrop-color: var(--gray-500);
   --light-theme-divider-color: var(--gray-400);
+  --light-theme-icon-button-inactive-color: var(--gray-200);
 
   --dark-theme-primary-color: var(--gray-100);
   --dark-theme-secondary-color: var(--gray-400);
   --dark-theme-disabled-color: var(---gray-500);
   --dark-theme-background-color: var(--gray-800);
+  --dark-theme-backdrop-color: var(--gray-800);
   --dark-theme-divider-color: var(--gray-600);
+  --dark-theme-icon-button-inactive-color: var(--gray-800);
   
   --dark-theme-html-bg: #121212;
   --dark-theme-card-bg: #1E1E1E;
 
   /* legend colors */
+  --amber-50: #FFF8E1;
+  --amber-100: #FFECB3;
   --amber-200: #FFE082;
   --amber-600: #FFB300;
+  --deep-orange-50: #FBE9E7;
+  --deep-orange-100: #FFCCBC;
   --deep-orange-200: #FFAB91;
   --deep-orange-600: #F4511E;
+  --light-green-50: #F1F8E9;
+  --light-green-100: #DCEDC8;
   --light-green-200: #C5E1A5;
   --light-green-600: #7CB342;
-  --cyan-200: #80DEEA;
-  --cyan-600: #00ACC1;
 
   /* card */
   --card-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);
+  
+  --light-theme-card-border: 1px solid var(--gray-300);
+  --dark-theme-card-border: none;
 }
 
 html,
@@ -44,7 +55,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Roboto Mono', monospace;
-  background-color: var(--light-theme-background-color);
+  background-color: var(--gray-100);
 }
 
 @media (prefers-color-scheme: dark) {
