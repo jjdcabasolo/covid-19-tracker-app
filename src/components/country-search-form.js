@@ -30,12 +30,13 @@ export default class CountrySearchForm extends LitElement {
         .search-icon {
           position: absolute;
           cursor: pointer;
-          bottom: 13px;
         }
         .search-icon {
+          bottom: 13px;
           left: 8px;
         }
         .clear-icon {
+          bottom: 14px;
           right: 8px;
         }
         .disabled {
@@ -52,12 +53,13 @@ export default class CountrySearchForm extends LitElement {
           .clear-icon,
           .search-icon {
             --mdc-icon-size: 20px;
-            bottom: 24px;
           }
           .search-icon {
+            bottom: 24px;
             left: 12px;
           }
           .clear-icon {
+            bottom: 25px;
             right: 12px;
           }
         }

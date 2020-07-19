@@ -35,7 +35,7 @@ This is a redesigned spin-off of once was the practice app for my current employ
 
 If you'll check the [initial commits](https://github.com/jjdcabasolo/covid-19-tracker-app/commit/f7705c4e68920899f2f0752c74a8840fe7756c12), there are a lot of initial files. The from-scratch commits can be found on a private repo.
 
-I asked permission to my boss if I can get that app and use it on my personal portfolio. And it was granted. Yay 🥳🎉
+I asked permission to my boss if I can use that app and put it on my personal portfolio. And it was granted. Yay 🥳🎉
 
 > [This is the original app](http://app-tracker-jourish.herokuapp.com/), the ones I used on our final presentation.
 
@@ -52,7 +52,7 @@ npm run start
 # Acknowledgements
 
 I want to thank you the following persons for being a part of the development of this app 😍🥰
-- **Boss Mikko, et. al**, for letting me use this app for my personal portfolio and the code review comments during the initial app development
-- **Kharisa**, **Blessy**, and **RC**, for acting as my user interface consultants, as well as providing the initial comments and suggestions interface-wise
-- **Jemil** and **Camille**, for testing the app, as well as providing suggestions for improvement
+- **Boss Mikko, Boss Niko, and Sammy**, for all the help, including lit-element basics, app structure, and code review during the initial app development
+- **Kharisa** and **RC**, for acting as my design consultants, as well as providing the initial comments and suggestions interface-wise
+- **Jemil**, **Camille**, and **Blessy** for testing the app, as well as providing suggestions for improvement
 - and you, for taking the time to read this long README.md 🤣
