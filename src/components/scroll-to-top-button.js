@@ -28,7 +28,7 @@ export default class ScrollToTopButton extends LitElement {
         }
         @media screen and (max-width: 600px) {
           .button-container {
-            padding: 0 16px 150px 0;
+            padding: 0 16px 180px 0;
           }
         }
       `,

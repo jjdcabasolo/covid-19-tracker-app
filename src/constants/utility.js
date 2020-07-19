@@ -1,1 +1,1 @@
-export default ['cases', 'deaths', 'recoveries', 'tests'];
+export default ['cases', 'deaths', 'recoveries'];

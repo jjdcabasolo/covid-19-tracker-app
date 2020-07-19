@@ -27,7 +27,7 @@ export default class ChipButton extends LitElement {
           width: fit-content;
           margin: 4px 0;
         }
-        .icon {
+        .chip-icon {
           --mdc-icon-size: 16px;
           margin-right: 2px;
         }

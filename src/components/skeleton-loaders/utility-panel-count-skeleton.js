@@ -37,7 +37,6 @@ export default class UtilityPanelCountSkeleton extends LitElement {
         @media screen and (max-width: 600px) {
           .count-container {
             margin-bottom: 0;
-            margin-top: 16px;
           }
         }
       `,

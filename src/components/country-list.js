@@ -2,11 +2,11 @@ import { LitElement, html, css } from 'lit-element';
 import { nothing } from 'lit-html';
 
 import '@appnest/masonry-layout/masonry-layout';
-import './country-card';
+import './card/country-card';
 import './skeleton-loaders/country-card-skeleton';
 import './scroll-to-top-button';
 
-import formatCountryName from '../utils/formatCountryName';
+import { formatCountryName } from '../utils/country';
 
 import fontStyles from '../styles/font-styles';
 
@@ -28,6 +28,10 @@ export default class CountryList extends LitElement {
         @media screen and (max-width: 600px) {
           p {
             height: 20vh;
+          }
+          .mobile-spacer {
+            width: 100%;
+            height: 40vh;
           }
         }
       `,
@@ -104,20 +108,22 @@ export default class CountryList extends LitElement {
   }
 
   render() {
+    const filteredItems = this.filterSearchQuery();
     return html`
       <masonry-layout gap="14" maxcolwidth="${this.isMobile ? 390 : 310}">
-        ${this.renderCountryList()}
+        ${this.renderCountryList(filteredItems)}
       </masonry-layout>
       <div id="scrollToTopSentinel"></div>
       <scroll-to-top-button
         ?isVisible="${this.hasScrollToTop}"
       ></scroll-to-top-button>
+      ${filteredItems.length < 3
+        ? html`<div class="mobile-spacer"></div>`
+        : nothing}
     `;
   }
 
-  renderCountryList() {
-    const filteredItems = this.filterSearchQuery();
-
+  renderCountryList(filteredItems) {
     if (filteredItems.length > 0) {
       const extraItems = this.isMobile ? 0 : 3;
       const itemAdjustment =
@@ -142,6 +148,8 @@ export default class CountryList extends LitElement {
             <div class="country-card-item">
               <country-card
                 .country=${e}
+                ?isPinned=${this.preference.includes(e.code)}
+                @set-pin=${this.setPin}
                 filter=${this.filter}
                 sort=${this.sort}
               ></country-card>
@@ -169,6 +177,7 @@ export default class CountryList extends LitElement {
 
   filterSearchQuery() {
     const filteredItems = this.countries
+      // coverage filtering
       .filter(e => {
         if (this.filter === 'worldwide') return e;
 
@@ -178,6 +187,7 @@ export default class CountryList extends LitElement {
 
         return trimmedContinent === this.filter;
       })
+      // case count sorting
       .sort((a, b) => {
         const [key, mode] = this.sort.split('-');
         const isAsc = mode === 'asc';
@@ -209,17 +219,47 @@ export default class CountryList extends LitElement {
         if (isAsc) return current - next;
         return next - current;
       })
+      // rank inclusion
       .map((e, i) => ({
         ...e,
         position: i,
       }))
+      // search filtering
       .filter(e => {
         const trimmedCountry = formatCountryName(e.country);
         const trimmedQuery = formatCountryName(this.query);
 
-        return trimmedCountry.includes(trimmedQuery);
+        return trimmedCountry.indexOf(trimmedQuery) === 0;
       });
 
+    if (this.preference.length > 0) {
+      let pinnedCountries = [];
+      let updatedFilteredItems = [...filteredItems];
+      // country pinning - pin to top
+      updatedFilteredItems = updatedFilteredItems.reduce((acc, cur) => {
+        if (this.preference.includes(cur.code)) {
+          pinnedCountries = [...pinnedCountries, cur];
+          return acc;
+        }
+
+        return acc.concat(cur);
+      }, []);
+
+      return [...pinnedCountries, ...updatedFilteredItems];
+    }
+
     return filteredItems;
+  }
+
+  setPin({ detail }) {
+    const { code } = detail;
+
+    if (this.preference.includes(code)) {
+      this.preference = this.preference.filter(e => e !== code);
+    } else {
+      this.preference = [...this.preference, code];
+    }
+    localStorage.setItem('preference', this.preference);
+    this.requestUpdate();
   }
 }

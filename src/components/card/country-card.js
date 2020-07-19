@@ -1,18 +1,21 @@
 /* eslint-disable class-methods-use-this */
 import { LitElement, html, css } from 'lit-element';
 
-import './case-count';
-import './country-date-item';
+import '../icon-button';
+import '../case-count';
+import '../country-date-item';
 
-import darkThemeStyles from '../styles/dark-theme-styles';
-import flexboxStyles from '../styles/flexbox-styles';
-import fontStyles from '../styles/font-styles';
+import cardStyles from './card.styles';
+import darkThemeStyles from '../../styles/dark-theme-styles';
+import flexboxStyles from '../../styles/flexbox-styles';
+import fontStyles from '../../styles/font-styles';
 
-import formatCountryName from '../utils/formatCountryName';
+import { formatCountryName } from '../../utils/country';
 
 export default class CountryCard extends LitElement {
   static get styles() {
     return [
+      cardStyles,
       flexboxStyles,
       fontStyles,
       css`
@@ -20,25 +23,11 @@ export default class CountryCard extends LitElement {
           width: inherit;
         }
         .card {
-          border-radius: 4px;
-          box-sizing: border-box;
-          display: inline-block;
-          padding: 16px;
-          position: relative;
           width: 240px;
-          border: 1px solid var(--gray-300);
-        }
-        .card:hover {
-          box-shadow: var(--card-shadow);
         }
         @media screen and (max-width: 1039px) {
           .card {
             width: inherit;
-          }
-        }
-        @media screen and (max-width: 600px) {
-          .card {
-            padding: 16px 24px;
           }
         }
         .statistic-container {
@@ -53,6 +42,11 @@ export default class CountryCard extends LitElement {
         .statistic:last-child {
           margin-bottom: 0;
         }
+        .country-pin {
+          position: absolute;
+          right: 16px;
+          bottom: 16px;
+        }
       `,
       darkThemeStyles,
     ];
@@ -62,6 +56,7 @@ export default class CountryCard extends LitElement {
     return {
       country: { type: Object },
       filter: { type: String },
+      isPinned: { type: Boolean },
       sort: { type: String },
     };
   }
@@ -71,27 +66,14 @@ export default class CountryCard extends LitElement {
 
     this.country = {};
     this.filter = '';
+    this.isPinned = false;
     this.sort = '';
   }
 
   render() {
-    const {
-      cases: c,
-      country,
-      deaths: d,
-      population,
-      position: rank,
-      tests: t,
-      time,
-    } = this.country;
+    const { cases: c, country, deaths: d, position: rank, time } = this.country;
     const { total: cases, new: newCases, recovered } = c;
     const { total: deaths, new: newDeaths } = d;
-    const { total: tests } = t;
-
-    const testPercentage =
-      tests / population > 0 && population > 0
-        ? ((tests / population) * 100).toFixed(2)
-        : 0;
 
     return html`
       <div class="card">
@@ -124,13 +106,14 @@ export default class CountryCard extends LitElement {
             recovered.toLocaleString(),
             NaN
           )}
-          ${this.renderStatistic(
-            'of the population tested',
-            'tests',
-            this.sort.includes('tests'),
-            `${testPercentage || 0}%`,
-            NaN
-          )}
+        </div>
+
+        <div class="country-pin">
+          <icon-button
+            ?inactive=${!this.isPinned}
+            @handle-icon-click=${this.handleIconClick}
+            icon="push_pin"
+          ></icon-button>
         </div>
       </div>
     `;
@@ -161,6 +144,16 @@ export default class CountryCard extends LitElement {
         </div>
       </div>
     `;
+  }
+
+  handleIconClick() {
+    this.dispatchEvent(
+      new CustomEvent('set-pin', {
+        detail: {
+          code: this.country.code,
+        },
+      })
+    );
   }
 }
 

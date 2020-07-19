@@ -32,6 +32,7 @@ export default merge(baseConfig, {
         { src: 'assets/*', dest: 'build/assets/' },
         { src: 'index.css', dest: 'build/' },
         { src: 'manifest.json', dest: 'build/' },
+        { src: 'sitemap.xml', dest: 'build/' },
       ],
     }),
   ],

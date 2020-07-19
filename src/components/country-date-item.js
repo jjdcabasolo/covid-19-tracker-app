@@ -5,11 +5,10 @@ import darkThemeStyles from '../styles/dark-theme-styles';
 import flexboxStyles from '../styles/flexbox-styles';
 import fontStyles from '../styles/font-styles';
 
-import formatCountryName from '../utils/formatCountryName';
+import { formatCountryName, getCountryCode } from '../utils/country';
 import ordinalize from '../utils/ordinalize';
 
 import months from '../constants/months';
-import countries from '../constants/countries';
 
 export default class CountryDateItem extends LitElement {
   static get styles() {
@@ -17,12 +16,16 @@ export default class CountryDateItem extends LitElement {
       fontStyles,
       flexboxStyles,
       css`
+        .container {
+          flex-wrap: nowrap;
+        }
         .country {
+          flex-grow: 1;
           font-weight: 400;
-          margin-right: 8px;
         }
         img {
-          height: 24px;
+          height: 2.25rem;
+          margin-top: -5px;
         }
         .date {
           margin-top: 4px;
@@ -63,7 +66,7 @@ export default class CountryDateItem extends LitElement {
 
     return html`
       <div class="container">
-        <div class="item country medium-text primary-text ">
+        <div class="item country large-text primary-text">
           ${this.processCountryNames()}
         </div>
         <div class="item">
@@ -101,18 +104,19 @@ export default class CountryDateItem extends LitElement {
         formattedCountryName = 'united kingdom';
       }
 
-      const res = countries.find(e =>
-        formatCountryName(e.name).includes(formattedCountryName)
-      );
-      const { code } = res;
+      const code = getCountryCode(formattedCountryName);
 
-      return html`
-        <img
-          alt="The National Flag of ${this.country}."
-          class="country-flag"
-          src="https://www.countryflags.io/${code}/shiny/24.png"
-        />
-      `;
+      if (window.navigator.onLine) {
+        return html`
+          <img
+            alt="The National Flag of ${this.country}."
+            class="country-flag"
+            src="https://www.countryflags.io/${code}/shiny/48.png"
+          />
+        `;
+      }
+
+      return nothing;
     }
 
     return nothing;

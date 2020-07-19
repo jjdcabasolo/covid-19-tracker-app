@@ -14,9 +14,6 @@ export default css`
   .recoveries-bg {
     background-color: var(--light-green-600);
   }
-  .tests-bg {
-    background-color: var(--cyan-600);
-  }
 
   .cases-c {
     border-color: var(--amber-600);
@@ -30,10 +27,6 @@ export default css`
     border-color: var(--light-green-600);
     color: var(--light-green-600);
   }
-  .tests-c {
-    border-color: var(--cyan-600);
-    color: var(--cyan-600);
-  }
 
   @media (prefers-color-scheme: dark) {
     .cases-bg {
@@ -44,9 +37,6 @@ export default css`
     }
     .recoveries-bg {
       background-color: var(--light-green-200);
-    }
-    .tests-bg {
-      background-color: var(--cyan-200);
     }
 
     .cases-c {
@@ -60,10 +50,6 @@ export default css`
     .recoveries-c {
       border-color: var(--light-green-200);
       color: var(--light-green-200);
-    }
-    .tests-c {
-      border-color: var(--cyan-200);
-      color: var(--cyan-200);
     }
   }
 `;

@@ -1,33 +1,23 @@
 import { LitElement, html, css } from 'lit-element';
 
-import './case-count';
-import './country-date-item';
+import '../case-count';
+import '../country-date-item';
 
-import darkThemeStyles from '../styles/dark-theme-styles';
-import flexboxStyles from '../styles/flexbox-styles';
+import cardStyles from './card.styles';
+import darkThemeStyles from '../../styles/dark-theme-styles';
+import flexboxStyles from '../../styles/flexbox-styles';
 
 export default class WorldwideCard extends LitElement {
   static get styles() {
     return [
+      cardStyles,
       flexboxStyles,
       css`
         .card {
-          border-radius: 4px;
-          border: 1px solid var(--gray-300);
-          box-sizing: border-box;
-          display: inline-block;
           margin-bottom: 16px;
-          padding: 16px;
-          position: relative;
           width: 100%;
         }
-        .card:hover {
-          box-shadow: var(--card-shadow);
-        }
         @media screen and (max-width: 600px) {
-          .card {
-            padding: 16px 24px;
-          }
           .countries:nth-child(2) {
             margin-top: 16px;
           }

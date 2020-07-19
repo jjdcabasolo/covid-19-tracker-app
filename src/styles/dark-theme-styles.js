@@ -31,16 +31,37 @@ export default css`
       background-color: var(--dark-theme-card-bg);
     }
     .input-container {
-      background-color: var(--dark-theme-html-bg);
+      background-color: transparent;
+    }
+    :host([sort='cases-desc']) .sticky,
+    :host([sort='cases-asc']) .sticky,
+    :host([sort='deaths-desc']) .sticky,
+    :host([sort='deaths-asc']) .sticky,
+    :host([sort='recoveries-desc']) .sticky,
+    :host([sort='recoveries-asc']) .sticky {
+      background-color: var(--gray-900);
+    }
+    :host([sort='cases-desc']) .sticky .icon-container,
+    :host([sort='cases-asc']) .sticky .icon-container,
+    :host([sort='deaths-desc']) .sticky .icon-container,
+    :host([sort='deaths-asc']) .sticky .icon-container,
+    :host([sort='recoveries-desc']) .sticky .icon-container,
+    :host([sort='recoveries-asc']) .sticky .icon-container {
+      background-color: var(--dark-theme-card-bg);
     }
     @media screen and (max-width: 600px) {
       input[name='countrySearch'] {
         background-color: var(--gray-900);
-        border: none;
+        border: 1px solid var(--gray-700);
       }
       .input-container {
         background-color: var(--gray-900);
       }
+    }
+
+    /* utility-panel.js */
+    .expand-icon-container {
+      border: 1px solid var(--gray-700);
     }
 
     /* chip-button.js */
@@ -73,8 +94,26 @@ export default css`
 
     /* scroll-to-top-button.js */
     .button {
-      background-color: var(--dark-theme-background-color);
+      background-color: var(--gray-800);
       color: var(--gray-50);
+    }
+
+    /* icon-button.js */
+    .icon {
+      color: var(--dark-theme-secondary-color);
+    }
+    :host([inactive]) .icon-container .icon {
+      color: var(--dark-theme-icon-button-inactive-color);
+    }
+
+    /* tablet-drawer.js */
+    .drawer,
+    .drawer-toggle {
+      background-color: var(--gray-900);
+      border: 1px solid var(--gray-900);
+    }
+    .backdrop {
+      background-color: var(--dark-theme-backdrop-color);
     }
   }
 `;

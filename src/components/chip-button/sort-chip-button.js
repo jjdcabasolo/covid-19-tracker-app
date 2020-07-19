@@ -22,8 +22,8 @@ export default class SortChipButton extends ChipButton {
     }
 
     return html`
-      <div class="item icon vcenter">
-        <mwc-icon class="icon">
+      <div class="item vcenter">
+        <mwc-icon class="chip-icon">
           ${this.active.includes('asc') ? 'arrow_downward' : 'arrow_upward'}
         </mwc-icon>
       </div>

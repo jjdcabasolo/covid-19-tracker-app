@@ -16,37 +16,49 @@ export default class CountrySearchForm extends LitElement {
           position: relative;
         }
         input[name='countrySearch'] {
-          background-color: transparent;
+          background-color: var(--light-theme-background-color);
           border-radius: 4px;
-          border: 1px solid var(--gray-300);
+          border: var(--light-theme-card-border);
           box-sizing: border-box;
           font-family: 'Roboto Mono', monospace;
           font-size: 14px;
-          padding: 8px 16px 8px 36px;
-          width: 100%;
+          margin: 8px 0;
+          padding: 8px 36px;
+          width: 99%;
+        }
+        .clear-icon,
+        .search-icon {
+          position: absolute;
+          cursor: pointer;
+          bottom: 13px;
         }
         .search-icon {
           left: 8px;
-          position: absolute;
-          top: 7px;
+        }
+        .clear-icon {
+          right: 8px;
         }
         .disabled {
           pointer-events: none;
-        }
-        label {
-          display: none;
         }
         @media screen and (max-width: 600px) {
           .input-container {
             position: static;
           }
           input[name='countrySearch'] {
-            padding: 8px 8px 8px 32px;
+            padding: 8px 40px;
+            margin: 16px 0;
+          }
+          .clear-icon,
+          .search-icon {
+            --mdc-icon-size: 20px;
+            bottom: 24px;
           }
           .search-icon {
-            --mdc-icon-size: 16px;
-            left: 34px;
-            top: 34px;
+            left: 12px;
+          }
+          .clear-icon {
+            right: 12px;
           }
         }
       `,
@@ -73,10 +85,19 @@ export default class CountrySearchForm extends LitElement {
       <div class="input-container ${this.readonly ? 'disabled' : ''}">
         <mwc-icon
           class="search-icon primary-text"
-          @click="${this.handleIconClick}"
-          >search</mwc-icon
+          @click="${this.handleSearchIconClick}"
         >
-        <label for="countrySearch">Label</label>
+          search
+        </mwc-icon>
+        <mwc-icon class="clear-icon primary-text" @click="${this.handleClear}">
+          clear
+        </mwc-icon>
+        <label for="countrySearch" class="small-text">
+          <slot name="label">
+            <span class="primary-text">search</span>
+            <span class="secondary-text">by country</span>
+          </slot>
+        </label>
         <input
           @input="${debounceEvent(() => this.handleSearchQuery(this), 500)}"
           aria-labelledby="countrySearch"
@@ -84,7 +105,7 @@ export default class CountrySearchForm extends LitElement {
           id="countrySearch"
           name="countrySearch"
           placeholder=${this.hasPlaceholder ? 'search country...' : ''}
-          type="search"
+          type="text"
         />
       </div>
     `;
@@ -100,10 +121,21 @@ export default class CountrySearchForm extends LitElement {
     );
   }
 
-  handleIconClick() {
+  handleSearchIconClick() {
     const input = this.shadowRoot.getElementById('countrySearch');
 
     input.focus();
+  }
+
+  handleClear() {
+    const input = this.shadowRoot.getElementById('countrySearch');
+
+    input.value = '';
+    this.dispatchEvent(
+      new CustomEvent('handle-search-query', {
+        detail: { query: '' },
+      })
+    );
   }
 }
 

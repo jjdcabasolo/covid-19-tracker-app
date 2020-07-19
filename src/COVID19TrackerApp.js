@@ -1,14 +1,18 @@
 import { LitElement, html, css } from 'lit-element';
+import { nothing } from 'lit-html';
 
 import './components/app-description';
+import './components/card/worldwide-card';
 import './components/country-list-connected';
 import './components/skeleton-loaders/worldwide-card-skeleton';
+import './components/tablet-drawer';
 import './components/utility-panel';
-import './components/worldwide-card';
 
 import darkThemeStyles from './styles/dark-theme-styles';
 import flexboxStyles from './styles/flexbox-styles';
 import fontStyles from './styles/font-styles';
+
+import trackerLogoSVG from './tracker-logo';
 
 const APP_TITLE = html`<h1 class="primary-text">COVID-19 Tracker</h1>`;
 const MOBILE = 600;
@@ -49,7 +53,26 @@ export default class COVID19TrackerApp extends LitElement {
           height: 100vh;
           position: fixed;
           top: 0;
-          width: 260px;
+          width: 250px;
+        }
+        utility-panel {
+          align-items: center;
+          display: flex;
+          height: 100vh;
+          overflow-y: auto;
+        }
+        .logo {
+          margin-right: 16px;
+        }
+        .logo svg {
+          height: 3em;
+          width: 3em;
+        }
+        @media screen and (max-height: 700px) and (orientation: landscape) {
+          utility-panel {
+            align-items: unset;
+            display: unset;
+          }
         }
         @media screen and (max-width: 600px) {
           .content {
@@ -57,6 +80,12 @@ export default class COVID19TrackerApp extends LitElement {
           }
           main {
             padding-bottom: 0;
+          }
+          utility-panel {
+            align-items: unset;
+            display: unset;
+            height: unset;
+            overflow-y: unset;
           }
         }
       `,
@@ -112,9 +141,18 @@ export default class COVID19TrackerApp extends LitElement {
     if (this.error !== '') {
       return html`
         <main>
-          ${APP_TITLE}
+          ${this.renderAppTitle()}
           <p class="primary-text">${this.error}</p>
         </main>
+      `;
+    }
+
+    if (this.isMobile) {
+      return html`
+        <main>
+          ${this.renderCountryList()}
+        </main>
+        ${this.renderUtilityPanel()}
       `;
     }
 
@@ -123,7 +161,9 @@ export default class COVID19TrackerApp extends LitElement {
         <main>
           ${this.renderCountryList()}
         </main>
-        ${this.renderUtilityBanner('bottom')}
+        <tablet-drawer>
+          ${this.renderUtilityPanel()}
+        </tablet-drawer>
       `;
     }
 
@@ -134,15 +174,7 @@ export default class COVID19TrackerApp extends LitElement {
         </div>
         <div class="item right-panel">
           <div class="right-panel-container">
-            <utility-panel
-              .worldwide=${this.coverage.get(this.config.filter)}
-              ?isLoading=${this.isLoading}
-              ?isMobile=${this.isMobile}
-              @handle-search-query=${this.handleSearchQuery}
-              @set-config=${this.setConfig}
-              filter=${this.config.filter}
-              sort=${this.config.sort}
-            ></utility-panel>
+            ${this.renderUtilityPanel()}
           </div>
         </div>
       </main>
@@ -150,19 +182,22 @@ export default class COVID19TrackerApp extends LitElement {
   }
 
   renderCountryList() {
+    let worldwide = this.renderWorldwideCard();
+    if (this.isMobile && this.query.length > 0) {
+      worldwide = nothing;
+    }
+
     return html`
       <div class="content">
-        ${APP_TITLE}
+        ${this.renderAppTitle()}
       </div>
 
       <div class="content">
         <app-description></app-description>
       </div>
 
-      ${this.isTablet ? this.renderUtilityBanner('top') : null}
-
       <div class="content">
-        ${this.renderWorldwideCard()}
+        ${worldwide}
         <country-list-connected
           ?isMobile=${this.isMobile}
           @handle-coverage-update=${this.handleCoverageUpdate}
@@ -172,6 +207,20 @@ export default class COVID19TrackerApp extends LitElement {
           query=${this.query}
           sort=${this.config.sort}
         ></country-list-connected>
+      </div>
+    `;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  renderAppTitle() {
+    return html`
+      <div class="container nowrap">
+        <div class="item vcenter logo">
+          ${trackerLogoSVG}
+        </div>
+        <div class="item vcenter">
+          ${APP_TITLE}
+        </div>
       </div>
     `;
   }
@@ -194,19 +243,17 @@ export default class COVID19TrackerApp extends LitElement {
     `;
   }
 
-  renderUtilityBanner(location) {
-    if (location === 'top' && this.isMobile) return null;
-    if (location === 'bottom' && !this.isMobile) return null;
-
+  renderUtilityPanel() {
     return html`
       <utility-panel
         .worldwide=${this.coverage.get(this.config.filter)}
         ?isLoading=${this.isLoading}
-        ?isMobile=${this.isTablet}
+        ?isMobile=${this.isMobile}
         ?revertIcons=${this.isMobile}
         @handle-search-query=${this.handleSearchQuery}
         @set-config=${this.setConfig}
         filter=${this.config.filter}
+        slot="content"
         sort=${this.config.sort}
       ></utility-panel>
     `;
