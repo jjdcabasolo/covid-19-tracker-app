@@ -52,6 +52,6 @@ npm run start
 
 I want to thank you the following persons for being a part of the development of this app 😍🥰
 - **Boss Mikko, Boss Niko, and Sammy**, for all the help, including lit-element basics, app structure, and code review during the initial app development
-- **Kharisa** and **RC**, for acting as my design consultants, as well as providing the initial comments and suggestions interface-wise
-- **Jemil**, **Camille**, and **Blessy** for testing the app, as well as providing suggestions for improvement
+- **Kharisa**, **Blessy**, and **RC**, for acting as my design consultants, as well as providing the initial comments and suggestions interface-wise
+- **Jemil** and **Camille**  for testing the app, as well as providing suggestions for improvement
 - and you, for taking the time to read this long README.md 🤣
