@@ -28,9 +28,16 @@ export default class CountrySearchForm extends LitElement {
         }
         .clear-icon,
         .search-icon {
-          position: absolute;
+          -khtml-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          -webkit-touch-callout: none;
+          -webkit-user-select: none;
           cursor: pointer;
-          bottom: 13px;
+          cursor: pointer;
+          position: absolute;
+          user-select: none;
+          bottom: 14px;
         }
         .search-icon {
           left: 8px;
@@ -52,12 +59,13 @@ export default class CountrySearchForm extends LitElement {
           .clear-icon,
           .search-icon {
             --mdc-icon-size: 20px;
-            bottom: 24px;
           }
           .search-icon {
+            bottom: 24px;
             left: 12px;
           }
           .clear-icon {
+            bottom: 25px;
             right: 12px;
           }
         }
@@ -130,12 +138,15 @@ export default class CountrySearchForm extends LitElement {
   handleClear() {
     const input = this.shadowRoot.getElementById('countrySearch');
 
-    input.value = '';
-    this.dispatchEvent(
-      new CustomEvent('handle-search-query', {
-        detail: { query: '' },
-      })
-    );
+    if (input.value.length > 0) {
+      input.value = '';
+
+      this.dispatchEvent(
+        new CustomEvent('handle-search-query', {
+          detail: { query: '' },
+        })
+      );
+    }
   }
 }
 
