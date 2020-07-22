@@ -18,11 +18,10 @@ It is built using web components with the help from [LitElement](https://lit-ele
 For the data source, it uses the free [COVID-19 API](https://api-sports.io/documentation/covid-19) by [api-sports](https://rapidapi.com/user/api-sports) from [RapidAPI](https://rapidapi.com/).
 
 ## Main features
-- **Country search**: user can search a country via its *name*.
+- **Country search**: user can search a country via its **name**.
 - **Coverage filtering**: user can filter the coverage of the list, either **worldwide** or by **continent**. Total count per coverage is also displayed.
 - **Case count sorting**: user can sort the list via [case count category](#case-count-category) in **ascending** or **descending** (*default*) order.
 - **Country pinning**: users can pin a country that would **stay on top of the list**. It is saved via `localStorage`.
-  - **User location**: gets the user's country for default country pinned.
 
 ## Other features
 - **Dark mode**: the app's theme adapts to the device/browser's current theme.

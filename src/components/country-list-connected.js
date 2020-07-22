@@ -4,7 +4,7 @@ import { formatCountryName, getCountryCode } from '../utils/country';
 
 import continents from '../constants/continents';
 
-import { apiHost, apiKey, apiUrl, apiPassphrase } from '../constants/api';
+import { apiHost, apiKey, apiPassphrase, apiUrl } from '../constants/api';
 
 export default class CountryListConnected extends CountryList {
   async fetchCountries() {
@@ -142,29 +142,6 @@ export default class CountryListConnected extends CountryList {
 
     if (userPref) {
       this.preference = [...this.preference, ...userPref.split(',')];
-      return;
-    }
-
-    try {
-      const response = await fetch('https://freegeoip.app/json/', {
-        method: 'GET',
-        headers: {
-          accept: 'application/json',
-          'content-type': 'application/json',
-        },
-      });
-
-      if (response.status !== 200) throw response;
-
-      const toJSON = await response.json();
-      const country = toJSON.country_name.toLowerCase();
-      const code = getCountryCode(country);
-
-      localStorage.setItem('preference', code);
-      this.preference = [...this.preference, code];
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.log(e);
     }
   }
 }
