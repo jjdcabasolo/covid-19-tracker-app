@@ -367,9 +367,9 @@ export default class UtilityPanel extends LitElement {
     return html`
       <div class="small-text primary-text">
         Data may not be 100% accurate.
-        <span class="secondary-text"
-          >It's a free API, so please bear with the API provider 😅</span
-        >
+        <span class="secondary-text">
+          It's a free API, so please bear with the API provider 😅
+        </span>
       </div>
     `;
   }
@@ -387,6 +387,8 @@ export default class UtilityPanel extends LitElement {
   handleSearchQuery({ detail }) {
     if (this.isMobile) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
+      document.body.style.overflow = '';
+      this.open = false;
     }
 
     this.dispatchEvent(new CustomEvent('handle-search-query', { detail }));

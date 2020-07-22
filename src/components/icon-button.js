@@ -16,11 +16,11 @@ export default class IconButton extends LitElement {
         }
         .icon {
           color: var(--light-theme-secondary-color);
-          --mdc-icon-size: 24px;
+          --mdc-icon-size: 20px;
         }
         @media screen and (max-width: 600px) {
           .icon {
-            --mdc-icon-size: 28px;
+            --mdc-icon-size: 24px;
           }
         }
         :host([inactive]) .icon-container .icon {

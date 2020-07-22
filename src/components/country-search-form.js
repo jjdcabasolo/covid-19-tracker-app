@@ -28,15 +28,21 @@ export default class CountrySearchForm extends LitElement {
         }
         .clear-icon,
         .search-icon {
-          position: absolute;
+          -khtml-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          -webkit-touch-callout: none;
+          -webkit-user-select: none;
           cursor: pointer;
+          cursor: pointer;
+          position: absolute;
+          user-select: none;
+          bottom: 14px;
         }
         .search-icon {
-          bottom: 13px;
           left: 8px;
         }
         .clear-icon {
-          bottom: 14px;
           right: 8px;
         }
         .disabled {
@@ -132,12 +138,15 @@ export default class CountrySearchForm extends LitElement {
   handleClear() {
     const input = this.shadowRoot.getElementById('countrySearch');
 
-    input.value = '';
-    this.dispatchEvent(
-      new CustomEvent('handle-search-query', {
-        detail: { query: '' },
-      })
-    );
+    if (input.value.length > 0) {
+      input.value = '';
+
+      this.dispatchEvent(
+        new CustomEvent('handle-search-query', {
+          detail: { query: '' },
+        })
+      );
+    }
   }
 }
 
