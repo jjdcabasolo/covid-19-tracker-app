@@ -18,14 +18,19 @@ export default class CountryDateItem extends LitElement {
       css`
         .container {
           flex-wrap: nowrap;
+          flex-grow: 1;
         }
         .country {
           flex-grow: 1;
           font-weight: 400;
         }
         img {
-          height: 2.25rem;
-          margin-top: -5px;
+          height: 20px;
+          width: 20px;
+        }
+        .flag {
+          display: flex;
+          align-items: center;
         }
         .date {
           margin-top: 4px;
@@ -69,7 +74,7 @@ export default class CountryDateItem extends LitElement {
         <div class="item country large-text primary-text">
           ${this.processCountryNames()}
         </div>
-        <div class="item">
+        <div class="item flag">
           ${this.renderFlag()}
         </div>
       </div>
@@ -111,7 +116,7 @@ export default class CountryDateItem extends LitElement {
           <img
             alt="The National Flag of ${this.country}."
             class="country-flag"
-            src="https://www.countryflags.io/${code}/shiny/48.png"
+            src="https://flagcdn.com/${code.toLowerCase()}.svg"
           />
         `;
       }
