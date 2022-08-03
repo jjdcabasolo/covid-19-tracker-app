@@ -8,8 +8,15 @@ export function formatCountryName(text, isLowerCase = true) {
 }
 
 export function getCountryCode(country) {
-  const res = countries.find((e) => formatCountryName(e.name).includes(formatCountryName(country)));
-  const { code } = res;
+  const res = countries.find(e =>
+    formatCountryName(e.name).includes(formatCountryName(country))
+  );
 
-  return code;
+  if (res) {
+    const { code } = res;
+
+    return code;
+  }
+
+  return '--';
 }
